@@ -1,0 +1,30 @@
+---
+title: Run Your First SecuredAll Test
+description: Step-by-step to run your first test suite.
+---
+
+## Overview
+
+Follow these steps to run your initial test on SecuredAll.
+
+<Steps>
+  <Step title="Install CLI">
+    ````bash
+    npm install -g securedall-cli
+    ````
+  </Step>
+  <Step title="Authenticate CLI">
+    ````bash
+    securedall login
+    # Paste your API token when prompted
+    ````
+  </Step>
+  <Step title="Run a test suite">
+    ````bash
+    securedall run --project=my-app
+    ````
+  </Step>
+  <Step title="View results">
+    Go to your dashboard at https://dashboard.securedall.com for detailed test evidence.
+  </Step>
+</Steps>

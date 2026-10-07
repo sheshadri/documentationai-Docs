@@ -1,0 +1,24 @@
+---
+title: Test Not Running
+description: Fix SecuredAll test execution issues.
+---
+
+## Symptoms
+- Test queued but never starts
+- CLI shows "Waiting for runner"
+
+## Common Causes
+- Agent not installed
+- Missing or invalid API token
+
+## Quick Fix
+<Steps>
+  <Step title="Check agent status">
+    ````bash
+    securedall agent status
+    ````
+  </Step>
+  <Step title="Update API token">
+    Make sure your API token is correct in the CLI config file.
+  </Step>
+</Steps>

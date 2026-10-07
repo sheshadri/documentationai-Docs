@@ -1,0 +1,167 @@
+---
+title: Changelog
+description: Version history of SecuredAll with details on the 2-3 most recent updates, improvements, and breaking changes.
+---
+
+## Recent Updates
+
+SecuredAll releases updates regularly to enhance human-like testing for web and mobile apps. You can find detailed release notes for each version below, including new features like WCAG reports and Playwright exports, improvements to scanning speed, and critical bug fixes.
+
+<Callout kind="success">
+  The latest version `v1.2.0` introduces WCAG evidence reports and faster mobile testing. Update now for the best experience.
+</Callout>
+
+<Update label="2024-12-05" description="v1.2.0" tags={["feature", "improvement"]}>
+
+## New Features
+
+- Added WCAG 2.2 A/AA evidence reports with authenticated page coverage, reproducible sampling, and manual review notes.
+- Support for printable PDF exports of scan results, including detected failures and exclusions.
+
+## Improvements
+
+- Reduced scan times by `30%` for login-aware workflows using real browsers and devices.
+- Enhanced independent test review with page-level evidence screenshots.
+
+## Bug Fixes
+
+- Fixed intermittent failures in mobile APK/IPA testing on iOS simulators.
+- Resolved export issues when tests included dynamic content.
+
+</Update>
+
+<Update label="2024-11-15" description="v1.1.0" tags={["feature", "bugfix"]}>
+
+## New Features
+
+- Playwright test export: Generate runnable Playwright scripts from your scans.
+- Live demo integration for quick testing without setup.
+
+## Improvements
+
+- Better handling of real-user workflows with automatic sign-in and exploration.
+
+## Bug Fixes
+
+- Corrected service status page monitoring during scans.
+- Fixed dashboard crashes on large result sets.
+
+</Update>
+
+<Update label="2024-10-20" description="v1.0.0" tags={["breaking", "feature"]}>
+
+## New Features
+
+- Core human-like testing engine for web and mobile apps.
+- No-code scanning: Start tests without writing code.
+
+## Breaking Changes
+
+- Updated CLI command from `securedall start` to `securedall scan`.
+
+## Initial Setup
+
+- First release with dashboard at `https://app.securedall.com`.
+
+</Update>
+
+## Upgrading SecuredAll
+
+Follow these steps to upgrade to the latest version and migrate your workflows.
+
+<Steps>
+  <Step title="Backup Your Data" icon="database">
+
+    Export your previous scans:
+
+````bash
+securedall export --workspace your-workspace-id > backup.json
+````
+
+  </Step>
+  <Step title="Update CLI" icon="download">
+
+    Install the latest version:
+
+    <CodeGroup tabs="npm,yarn">
+```bash
+npm install -g @securedall/cli@latest
+```
+
+```bash
+yarn global add @securedall/cli@latest
+```
+    </CodeGroup>
+
+  </Step>
+  <Step title="Run Migration" icon="settings">
+
+    Migrate configs for breaking changes:
+
+````bash
+securedall migrate --from v1.0.0 --to v1.2.0
+````
+
+    Review the output for any manual steps.
+
+  </Step>
+  <Step title="Test Scan" icon="zap">
+
+    Verify with a simple scan:
+
+````bash
+securedall scan https://example.com --api-key YOUR_API_KEY
+````
+
+  </Step>
+</Steps>
+
+<Callout kind="alert">
+  For `v1.0.0` to `v1.1.0` migrations, update your auth tokens to use `{API_KEY}` format.
+</Callout>
+
+## Upcoming Roadmap
+
+Track planned features and improvements.
+
+<Board title="Feature Roadmap">
+  <BoardColumn title="Planned" color="0" icon="calendar">
+    <BoardCard
+      title="iOS Native App Testing"
+      description="Full IPA support with device farm integration"
+      icon="mobile"
+      dueDate="2025-01-15"
+    />
+    <BoardCard
+      title="Custom Workflows"
+      description="Define user journeys with conditional logic"
+      icon="git-branch"
+    />
+  </BoardColumn>
+  <BoardColumn title="In Progress" color="1" icon="loader-2">
+    <BoardCard
+      title="AI-Powered Test Review"
+      description="Automated failure analysis with fix suggestions"
+      icon="bot"
+      author="Engineering Team"
+    />
+  </BoardColumn>
+  <BoardColumn title="Next" color="2" icon="check-circle">
+    <BoardCard
+      title="Advanced WCAG Reporting"
+      description="AAA compliance and custom checklists"
+      createdAt="2024-12-01"
+    />
+  </BoardColumn>
+</Board>
+
+## Explore More
+
+<Columns cols={2}>
+  <Card title="Migration Guides" icon="book-open" href="#">
+    Detailed instructions for each version upgrade.
+  </Card>
+  <Card title="Report Issues" icon="github" href="https://github.com/securedall/securedall/issues" target="_blank">
+    Found a bug? Open an issue on GitHub.
+  </Card>
+</Columns>
