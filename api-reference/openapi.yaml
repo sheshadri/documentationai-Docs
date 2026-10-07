@@ -150,7 +150,7 @@ components:
     ciToken:
       type: http
       scheme: bearer
-      bearerFormat: aegis_<token>
+      bearerFormat: aegis_project_token
       description: Create a project token under Project setup → CI/CD.
   responses:
     Unauthorized:

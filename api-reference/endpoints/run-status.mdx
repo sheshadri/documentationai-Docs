@@ -1,6 +1,8 @@
 ---
 title: "Get run status"
 description: "Read the current state and available case results for a run in the CI token's project."
+method: GET
+path: "/ci/runs/{runId}"
 ---
 
 Read the current state and available case results for a run in the CI token's project. Continue polling until isFinished is true, then inspect status and failedCases.

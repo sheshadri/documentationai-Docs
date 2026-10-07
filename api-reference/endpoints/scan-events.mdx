@@ -1,6 +1,8 @@
 ---
 title: "Stream scan progress"
 description: "Follow website discovery and test generation through Server-Sent Events."
+method: GET
+path: "/ci/crawls/{crawlId}/events"
 ---
 
 Follow website discovery and test generation through Server-Sent Events. Use the crawl_id returned by a website scan trigger. Completion is reported by the done event.
