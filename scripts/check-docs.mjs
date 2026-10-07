@@ -1,5 +1,5 @@
 import { readFile, readdir } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
@@ -12,6 +12,7 @@ import SwaggerParser from '@apidevtools/swagger-parser';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = p => readFile(path.join(root, p), 'utf8');
+const fsRead = p => readFileSync(path.join(root, p), 'utf8');
 async function files(dir = '') {
   const found = [];
   for (const item of await readdir(path.join(root, dir), { withFileTypes: true })) {
@@ -33,6 +34,7 @@ assert.equal(config.name, 'AegisRunner');
 const paths = await files();
 const routes = new Set(paths.map(p => p.replace(/\.mdx$/, '')));
 const linked = new Set();
+const endpointConnections = new Set();
 const links = [];
 let examples = 0;
 function walk(node, fn) {
@@ -72,7 +74,17 @@ function navigation(value) {
     assert(!linked.has(value.path), `Duplicate navigation page: ${value.path}`);
     linked.add(value.path);
   }
-  if (value.openapi) assert(existsSync(path.join(root, value.openapi)), `Missing OpenAPI file: ${value.openapi}`);
+  if (value.openapi) {
+    const [spec, method, endpoint] = value.openapi.split(' ');
+    assert(existsSync(path.join(root, spec)), `Missing OpenAPI file: ${spec}`);
+    if (value.path) {
+      const parsed = parse(fsRead(spec));
+      assert(method && endpoint && parsed.paths?.[endpoint]?.[method.toLowerCase()], `Unknown OpenAPI operation: ${value.openapi}`);
+      assert.equal(spec, 'api-reference/openapi.yaml');
+      assert(!endpointConnections.has(`${method} ${endpoint}`), `Duplicate API page: ${value.openapi}`);
+      endpointConnections.add(`${method} ${endpoint}`);
+    }
+  }
   Object.values(value).forEach(navigation);
 }
 navigation(config.navigation);
@@ -87,4 +99,9 @@ for (const [file, href] of links) {
 const api = await SwaggerParser.validate(path.join(root, 'api-reference/openapi.yaml'));
 assert.equal(api.servers[0].url, 'https://app.aegisrunner.com/api/v1');
 assert.deepEqual(Object.keys(api.paths).sort(), ['/ci/crawls/{crawlId}/events', '/ci/runs/{runId}', '/ci/trigger']);
+for (const [endpoint, operations] of Object.entries(api.paths)) {
+  for (const method of ['get', 'post', 'put', 'patch', 'delete']) {
+    if (operations[method]) assert(endpointConnections.has(`${method.toUpperCase()} ${endpoint}`), `API endpoint missing from navigation: ${method} ${endpoint}`);
+  }
+}
 console.log(`Validated ${paths.length} MDX pages, navigation, ${links.length} links, ${examples} JSON/YAML examples, site schema, and ${Object.keys(api.paths).length} API endpoints.`);

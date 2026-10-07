@@ -181,8 +181,29 @@
           },
           {
             "group": "CI endpoints",
-            "openapi": "api-reference/openapi.yaml",
-            "pages": []
+            "pages": [
+              {
+                "title": "Trigger a run or scan",
+                "path": "api-reference/endpoints/trigger",
+                "method": "POST",
+                "openapi": "api-reference/openapi.yaml POST /ci/trigger",
+                "openapi-mode": "auto"
+              },
+              {
+                "title": "Get run status",
+                "path": "api-reference/endpoints/run-status",
+                "method": "GET",
+                "openapi": "api-reference/openapi.yaml GET /ci/runs/{runId}",
+                "openapi-mode": "auto"
+              },
+              {
+                "title": "Stream scan progress",
+                "path": "api-reference/endpoints/scan-events",
+                "method": "GET",
+                "openapi": "api-reference/openapi.yaml GET /ci/crawls/{crawlId}/events",
+                "openapi-mode": "auto"
+              }
+            ]
           }
         ]
       },

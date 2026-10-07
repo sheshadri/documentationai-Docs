@@ -54,6 +54,9 @@ Useful source locations in the application repository:
 The old application `openapi-v1.yaml` contains placeholder hosts and older contracts;
 it is not copied into the customer API reference. The published specification
 covers the three implemented CI automation endpoints and their common fields.
+Each endpoint has an explicit MDX page with a page-level OpenAPI connection in
+`documentation.json`; the checker requires every published operation to appear
+in navigation.
 
 ## Review and publish
 
