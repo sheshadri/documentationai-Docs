@@ -1,0 +1,23 @@
+---
+title: "Review audit logs"
+description: "Find organization events and inspect who changed a resource."
+---
+
+Open **Account settings → Audit log** to review available organization activity. Access depends on your plan and permissions.
+
+## Find an event
+
+1. Select the action, such as create, update, delete, login, invite, or remove.
+2. Select the resource type when narrowing the investigation.
+3. Move through the result pages for the relevant time.
+4. Expand an event to inspect its actor, resource ID, timestamp, and available before/after values.
+
+Record the timezone when comparing events with deployment, scan, or support logs. A displayed IP address can help investigate an event but does not identify a person by itself.
+
+## Compare with the resource
+
+Open the affected project, member, schedule, suite, integration, or SSO setting and check its current state. Events and the current configuration answer different questions.
+
+Avoid sharing a whole event payload if a small set of safe details will explain the problem. Review exported or copied values for personal data and secrets before sending them to another person.
+
+Audit availability and retention follow the account's current policy and plan. Use the settings and [Privacy policy](https://aegisrunner.com/privacy) for the applicable terms rather than treating an absent older event as proof that no action occurred.

@@ -1,0 +1,12 @@
+---
+title: "Create a test case"
+description: "Create a case in a suite with the appropriate project write role."
+method: POST
+path: "/suites/{suiteId}/cases"
+---
+
+Create a case in a suite with the appropriate project write role. Steps can be supplied with the case; verify their targets and expected behavior before running it.
+
+Authenticate with an account session as described in [Project and testing API](/api-reference/platform-api). Use resource IDs available to the same organization and project.
+
+For unattended pipelines, use the separately authenticated [CI endpoints](/api-reference/overview).

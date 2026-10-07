@@ -1,0 +1,24 @@
+---
+title: "Analytics and test trends"
+description: "Interpret execution history and compare results across consistent testing conditions."
+---
+
+Open **Analytics** in the project to examine available run and testing trends. Use it to decide where to investigate, then open the underlying execution for evidence.
+
+## Review the scope
+
+Check the project, date range, selected scan, and any filters offered by the view. Counts from different suites or surfaces do not necessarily measure the same work.
+
+Compare passed, failed, skipped, and needs-review results separately. A lower failure count can result from running fewer tests rather than fixing an application defect.
+
+## Investigate changes
+
+When a trend changes, compare the target environment, account role, data, browser, and suite selection. Look for a new deployment, expired access, regenerated tests, or a changed test expectation.
+
+Open the relevant run to inspect cases and steps. Use [Failure triage](/guides/failure-triage) if multiple failures may share a cause.
+
+## Handle intermittent results
+
+Repeat a focused case under the same conditions to determine whether it is stable. Inspect timing, data dependencies, and selectors before changing expectations.
+
+Keep useful cases enabled and reviewed. If a case is temporarily excluded or quarantined through an available control, record why and restore it after correcting the cause.

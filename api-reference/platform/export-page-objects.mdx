@@ -1,0 +1,12 @@
+---
+title: "Export a page object project"
+description: "Download a generated page-object project for an eligible suite and plan."
+method: GET
+path: "/suites/{suiteId}/export/pom"
+---
+
+Download a generated page-object project for an eligible suite and plan. Suites without page-object code can return 404.
+
+Authenticate with an account session as described in [Project and testing API](/api-reference/platform-api). Use resource IDs available to the same organization and project.
+
+For unattended pipelines, use the separately authenticated [CI endpoints](/api-reference/overview).

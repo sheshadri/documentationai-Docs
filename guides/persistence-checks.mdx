@@ -1,0 +1,32 @@
+---
+title: "Verify saved data"
+description: "Distinguish an accepted write action from a separately verified record and field values."
+---
+
+An app can display a success message even when a record is missing or its fields differ. Persistence checks track whether a separate read found the saved record and, where available, verified submitted values.
+
+## Read the result
+
+Open the scan's persistence checks in its results view. Review the submission and its verification evidence.
+
+| Result | What it establishes |
+| --- | --- |
+| Accepted action | The app acknowledged the action. |
+| Persistence verified | A separate read found the saved record. |
+| Persistence contradicted | Verification found evidence inconsistent with the saved record. |
+| Saved fields verified | The checked submitted field values matched the later read. |
+| Unverified | Available evidence did not establish the relevant result. |
+
+Finding a record does not mean every field was verified. Check which fields and observations support the result.
+
+## Prepare a useful workflow
+
+Use a staging account with create and read permissions, disposable data, and a distinctive identifier. The verifier needs a reachable way to find the created record, such as its detail page or an allowed read surface.
+
+When different roles or apps participate, confirm that they use the same backend environment. See [Cross-role testing](/guides/cross-surface-testing).
+
+## Investigate a contradiction
+
+Compare submitted values with the later record, permissions, and timing. Check whether the app saved a different value, whether the record was filtered from the test user, or whether another process changed it.
+
+Resolve the cause and repeat the workflow. Treat an unverified result as missing evidence rather than a pass.

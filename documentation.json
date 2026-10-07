@@ -59,6 +59,14 @@
                 "path": "quickstart"
               },
               {
+                "title": "Start with a free website scan",
+                "path": "guides/public-scan"
+              },
+              {
+                "title": "Examples and a guided walkthrough",
+                "path": "guides/examples"
+              },
+              {
                 "title": "What AegisRunner tests",
                 "path": "features"
               },
@@ -98,11 +106,56 @@
             ]
           },
           {
+            "group": "Advanced workflows",
+            "pages": [
+              {
+                "title": "Cross-role and web and mobile tests",
+                "path": "guides/cross-surface-testing"
+              },
+              {
+                "title": "User journeys and composite suites",
+                "path": "guides/composite-suites"
+              },
+              {
+                "title": "Data-driven tests and CSV examples",
+                "path": "guides/data-driven-testing"
+              },
+              {
+                "title": "Browsers and test selection",
+                "path": "guides/browser-and-selection"
+              },
+              {
+                "title": "API checks inside a workflow",
+                "path": "guides/api-checks"
+              },
+              {
+                "title": "Import tests and export code",
+                "path": "guides/import-export"
+              }
+            ]
+          },
+          {
             "group": "Results and evidence",
             "pages": [
               {
                 "title": "Read and share results",
                 "path": "guides/results"
+              },
+              {
+                "title": "Failure triage and auto-heal",
+                "path": "guides/failure-triage"
+              },
+              {
+                "title": "Issues and coverage",
+                "path": "guides/issues-and-coverage"
+              },
+              {
+                "title": "Verify saved data",
+                "path": "guides/persistence-checks"
+              },
+              {
+                "title": "Page audits and their limits",
+                "path": "guides/audits"
               },
               {
                 "title": "Accessibility and WCAG reports",
@@ -111,6 +164,14 @@
               {
                 "title": "Baselines and visual changes",
                 "path": "guides/baselines"
+              },
+              {
+                "title": "Analytics and test trends",
+                "path": "guides/analytics"
+              },
+              {
+                "title": "Review what AegisRunner learned",
+                "path": "guides/learned-behavior"
               }
             ]
           },
@@ -130,12 +191,12 @@
                 "path": "automation/local-testing"
               },
               {
-                "title": "Scheduled testing",
-                "path": "automation/schedules"
+                "title": "Vite Nuxt and Next development workflows",
+                "path": "automation/framework-plugins"
               },
               {
-                "title": "Integrations and notifications",
-                "path": "integrations"
+                "title": "Scheduled testing",
+                "path": "automation/schedules"
               },
               {
                 "title": "AI provider setup",
@@ -144,8 +205,57 @@
             ]
           },
           {
-            "group": "Account",
+            "group": "Integrations",
             "pages": [
+              {
+                "title": "Integrations and notifications",
+                "path": "integrations"
+              },
+              {
+                "title": "GitHub Issues and Jira",
+                "path": "integrations/issue-trackers"
+              },
+              {
+                "title": "Email and chat notifications",
+                "path": "integrations/notifications"
+              },
+              {
+                "title": "Custom notification webhooks",
+                "path": "integrations/custom-webhooks"
+              },
+              {
+                "title": "Deployment-triggered testing",
+                "path": "integrations/deployment-webhooks"
+              }
+            ]
+          },
+          {
+            "group": "Account and organization",
+            "pages": [
+              {
+                "title": "Account profile and security",
+                "path": "account/profile-and-security"
+              },
+              {
+                "title": "Two-factor authentication and backup codes",
+                "path": "account/two-factor-authentication"
+              },
+              {
+                "title": "Teams and project permissions",
+                "path": "account/team-and-permissions"
+              },
+              {
+                "title": "Set up SAML single sign-on",
+                "path": "account/sso"
+              },
+              {
+                "title": "Review audit logs",
+                "path": "account/audit-logs"
+              },
+              {
+                "title": "Test data and shared reports",
+                "path": "account/data-and-sharing"
+              },
               {
                 "title": "Plans and usage",
                 "path": "account/plans-and-usage"
@@ -176,6 +286,10 @@
               {
                 "title": "API errors and completion states",
                 "path": "api-reference/errors"
+              },
+              {
+                "title": "Project and testing API",
+                "path": "api-reference/platform-api"
               }
             ]
           },
@@ -201,6 +315,171 @@
                 "path": "api-reference/endpoints/scan-events",
                 "method": "GET",
                 "openapi": "api-reference/openapi.yaml GET /ci/crawls/{crawlId}/events",
+                "openapi-mode": "auto"
+              }
+            ]
+          },
+          {
+            "group": "Projects",
+            "pages": [
+              {
+                "title": "List projects",
+                "path": "api-reference/platform/list-projects",
+                "method": "GET",
+                "openapi": "api-reference/openapi.yaml GET /projects",
+                "openapi-mode": "auto"
+              },
+              {
+                "title": "Create a project",
+                "path": "api-reference/platform/create-project",
+                "method": "POST",
+                "openapi": "api-reference/openapi.yaml POST /projects",
+                "openapi-mode": "auto"
+              },
+              {
+                "title": "Get a project",
+                "path": "api-reference/platform/get-project",
+                "method": "GET",
+                "openapi": "api-reference/openapi.yaml GET /projects/{projectId}",
+                "openapi-mode": "auto"
+              }
+            ]
+          },
+          {
+            "group": "Suites and cases",
+            "pages": [
+              {
+                "title": "List project suites",
+                "path": "api-reference/platform/list-suites",
+                "method": "GET",
+                "openapi": "api-reference/openapi.yaml GET /projects/{projectId}/suites",
+                "openapi-mode": "auto"
+              },
+              {
+                "title": "Create a custom suite",
+                "path": "api-reference/platform/create-suite",
+                "method": "POST",
+                "openapi": "api-reference/openapi.yaml POST /projects/{projectId}/custom-suites",
+                "openapi-mode": "auto"
+              },
+              {
+                "title": "List suite cases",
+                "path": "api-reference/platform/list-cases",
+                "method": "GET",
+                "openapi": "api-reference/openapi.yaml GET /suites/{suiteId}/cases",
+                "openapi-mode": "auto"
+              },
+              {
+                "title": "Create a test case",
+                "path": "api-reference/platform/create-case",
+                "method": "POST",
+                "openapi": "api-reference/openapi.yaml POST /suites/{suiteId}/cases",
+                "openapi-mode": "auto"
+              },
+              {
+                "title": "Get a test case",
+                "path": "api-reference/platform/get-case",
+                "method": "GET",
+                "openapi": "api-reference/openapi.yaml GET /cases/{caseId}",
+                "openapi-mode": "auto"
+              },
+              {
+                "title": "Review a test case",
+                "path": "api-reference/platform/review-case",
+                "method": "PUT",
+                "openapi": "api-reference/openapi.yaml PUT /cases/{caseId}/review",
+                "openapi-mode": "auto"
+              }
+            ]
+          },
+          {
+            "group": "Test runs",
+            "pages": [
+              {
+                "title": "Create a project test run",
+                "path": "api-reference/platform/create-run",
+                "method": "POST",
+                "openapi": "api-reference/openapi.yaml POST /projects/{projectId}/test-runs",
+                "openapi-mode": "auto"
+              },
+              {
+                "title": "List project test runs",
+                "path": "api-reference/platform/list-runs",
+                "method": "GET",
+                "openapi": "api-reference/openapi.yaml GET /projects/{projectId}/test-runs",
+                "openapi-mode": "auto"
+              },
+              {
+                "title": "Get a project test run",
+                "path": "api-reference/platform/get-run",
+                "method": "GET",
+                "openapi": "api-reference/openapi.yaml GET /test-runs/{runId}",
+                "openapi-mode": "auto"
+              },
+              {
+                "title": "Cancel a test run",
+                "path": "api-reference/platform/cancel-run",
+                "method": "POST",
+                "openapi": "api-reference/openapi.yaml POST /test-runs/{runId}/cancel",
+                "openapi-mode": "auto"
+              },
+              {
+                "title": "Rerun a test execution",
+                "path": "api-reference/platform/rerun",
+                "method": "POST",
+                "openapi": "api-reference/openapi.yaml POST /test-runs/{runId}/rerun",
+                "openapi-mode": "auto"
+              }
+            ]
+          },
+          {
+            "group": "Imports and exports",
+            "pages": [
+              {
+                "title": "Export suite code",
+                "path": "api-reference/platform/export-code",
+                "method": "GET",
+                "openapi": "api-reference/openapi.yaml GET /suites/{suiteId}/export/{language}",
+                "openapi-mode": "auto"
+              },
+              {
+                "title": "Export a page object project",
+                "path": "api-reference/platform/export-page-objects",
+                "method": "GET",
+                "openapi": "api-reference/openapi.yaml GET /suites/{suiteId}/export/pom",
+                "openapi-mode": "auto"
+              },
+              {
+                "title": "Export a run report",
+                "path": "api-reference/platform/export-report",
+                "method": "GET",
+                "openapi": "api-reference/openapi.yaml GET /test-runs/{runId}/export/{format}",
+                "openapi-mode": "auto"
+              },
+              {
+                "title": "Import test cases",
+                "path": "api-reference/platform/import-cases",
+                "method": "POST",
+                "openapi": "api-reference/openapi.yaml POST /projects/{projectId}/test-cases/import",
+                "openapi-mode": "auto"
+              }
+            ]
+          },
+          {
+            "group": "Configuration",
+            "pages": [
+              {
+                "title": "List project environments",
+                "path": "api-reference/platform/list-environments",
+                "method": "GET",
+                "openapi": "api-reference/openapi.yaml GET /projects/{projectId}/environments",
+                "openapi-mode": "auto"
+              },
+              {
+                "title": "List test data sets",
+                "path": "api-reference/platform/list-data-sets",
+                "method": "GET",
+                "openapi": "api-reference/openapi.yaml GET /projects/{projectId}/test-data-sets",
                 "openapi-mode": "auto"
               }
             ]
@@ -246,11 +525,252 @@
               {
                 "title": "Mobile scan troubleshooting",
                 "path": "help-center/troubleshooting/mobile-scan"
+              },
+              {
+                "title": "Troubleshoot testing and integrations",
+                "path": "help-center/troubleshooting/common-issues"
               }
             ]
           }
         ]
       }
     ]
-  }
+  },
+  "redirects": [
+    {
+      "source": "/accessibility-testing",
+      "destination": "/guides/accessibility",
+      "statusCode": 301
+    },
+    {
+      "source": "/account-settings",
+      "destination": "/account/profile-and-security",
+      "statusCode": 301
+    },
+    {
+      "source": "/ai-test-generation",
+      "destination": "/guides/ai-provider",
+      "statusCode": 301
+    },
+    {
+      "source": "/api-overview",
+      "destination": "/api-reference/platform-api",
+      "statusCode": 301
+    },
+    {
+      "source": "/api-testing",
+      "destination": "/guides/api-checks",
+      "statusCode": 301
+    },
+    {
+      "source": "/ci-cd-integration",
+      "destination": "/automation/ci-cd",
+      "statusCode": 301
+    },
+    {
+      "source": "/common-issues",
+      "destination": "/help-center/troubleshooting/common-issues",
+      "statusCode": 301
+    },
+    {
+      "source": "/composite-test-suites",
+      "destination": "/guides/composite-suites",
+      "statusCode": 301
+    },
+    {
+      "source": "/crawl-results",
+      "destination": "/guides/results",
+      "statusCode": 301
+    },
+    {
+      "source": "/dashboard-overview",
+      "destination": "/guides/projects",
+      "statusCode": 301
+    },
+    {
+      "source": "/debugging-tests",
+      "destination": "/guides/failure-triage",
+      "statusCode": 301
+    },
+    {
+      "source": "/deployment-webhooks",
+      "destination": "/integrations/deployment-webhooks",
+      "statusCode": 301
+    },
+    {
+      "source": "/failure-triage",
+      "destination": "/guides/failure-triage",
+      "statusCode": 301
+    },
+    {
+      "source": "/framework-plugins",
+      "destination": "/automation/framework-plugins",
+      "statusCode": 301
+    },
+    {
+      "source": "/free-scan",
+      "destination": "/guides/public-scan",
+      "statusCode": 301
+    },
+    {
+      "source": "/integrations-guide",
+      "destination": "/integrations",
+      "statusCode": 301
+    },
+    {
+      "source": "/issue-tracking",
+      "destination": "/integrations/issue-trackers",
+      "statusCode": 301
+    },
+    {
+      "source": "/live-demos",
+      "destination": "/guides/examples",
+      "statusCode": 301
+    },
+    {
+      "source": "/managing-projects",
+      "destination": "/guides/projects",
+      "statusCode": 301
+    },
+    {
+      "source": "/mobile-app-testing",
+      "destination": "/guides/mobile-testing",
+      "statusCode": 301
+    },
+    {
+      "source": "/notifications-alerts",
+      "destination": "/integrations/notifications",
+      "statusCode": 301
+    },
+    {
+      "source": "/pom-export",
+      "destination": "/guides/import-export",
+      "statusCode": 301
+    },
+    {
+      "source": "/quick-start-guide",
+      "destination": "/quickstart",
+      "statusCode": 301
+    },
+    {
+      "source": "/regression-manifests",
+      "destination": "/guides/baselines",
+      "statusCode": 301
+    },
+    {
+      "source": "/roles-and-permissions",
+      "destination": "/account/team-and-permissions",
+      "statusCode": 301
+    },
+    {
+      "source": "/running-tests",
+      "destination": "/guides/test-suites",
+      "statusCode": 301
+    },
+    {
+      "source": "/scheduling-tests",
+      "destination": "/automation/schedules",
+      "statusCode": 301
+    },
+    {
+      "source": "/slack-integration",
+      "destination": "/integrations/notifications",
+      "statusCode": 301
+    },
+    {
+      "source": "/smart-test-selection",
+      "destination": "/guides/browser-and-selection",
+      "statusCode": 301
+    },
+    {
+      "source": "/sso-saml-setup",
+      "destination": "/account/sso",
+      "statusCode": 301
+    },
+    {
+      "source": "/starting-new-crawl",
+      "destination": "/guides/website-scans",
+      "statusCode": 301
+    },
+    {
+      "source": "/subscription-plans",
+      "destination": "/account/plans-and-usage",
+      "statusCode": 301
+    },
+    {
+      "source": "/team-management",
+      "destination": "/account/team-and-permissions",
+      "statusCode": 301
+    },
+    {
+      "source": "/test-baseline-review",
+      "destination": "/guides/authoring-tests",
+      "statusCode": 301
+    },
+    {
+      "source": "/test-data-management",
+      "destination": "/guides/data-driven-testing",
+      "statusCode": 301
+    },
+    {
+      "source": "/testing-behind-a-firewall",
+      "destination": "/automation/local-testing",
+      "statusCode": 301
+    },
+    {
+      "source": "/two-factor-authentication",
+      "destination": "/account/two-factor-authentication",
+      "statusCode": 301
+    },
+    {
+      "source": "/usage-billing",
+      "destination": "/account/billing",
+      "statusCode": 301
+    },
+    {
+      "source": "/user-flow-tests",
+      "destination": "/guides/composite-suites",
+      "statusCode": 301
+    },
+    {
+      "source": "/visual-regression-testing",
+      "destination": "/guides/baselines",
+      "statusCode": 301
+    },
+    {
+      "source": "/what-is-aegisrunner",
+      "destination": "/introduction",
+      "statusCode": 301
+    },
+    {
+      "source": "/page-details-slider",
+      "destination": "/guides/results",
+      "statusCode": 301
+    },
+    {
+      "source": "/creating-projects",
+      "destination": "/guides/projects",
+      "statusCode": 301
+    },
+    {
+      "source": "/test-suite-structure",
+      "destination": "/guides/composite-suites",
+      "statusCode": 301
+    },
+    {
+      "source": "/test-run-results",
+      "destination": "/guides/test-suites",
+      "statusCode": 301
+    },
+    {
+      "source": "/form-test-data",
+      "destination": "/guides/data-driven-testing",
+      "statusCode": 301
+    },
+    {
+      "source": "/understanding-interface",
+      "destination": "/guides/projects",
+      "statusCode": 301
+    }
+  ]
 }

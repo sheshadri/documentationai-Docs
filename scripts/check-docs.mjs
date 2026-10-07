@@ -98,10 +98,12 @@ for (const [file, href] of links) {
 }
 const api = await SwaggerParser.validate(path.join(root, 'api-reference/openapi.yaml'));
 assert.equal(api.servers[0].url, 'https://app.aegisrunner.com/api/v1');
-assert.deepEqual(Object.keys(api.paths).sort(), ['/ci/crawls/{crawlId}/events', '/ci/runs/{runId}', '/ci/trigger']);
+for (const route of ['/ci/crawls/{crawlId}/events', '/ci/runs/{runId}', '/ci/trigger']) assert(api.paths[route], `Required CI endpoint missing: ${route}`);
+const legacyRoutes = JSON.parse(await read('scripts/legacy-doc-routes.json'));
+for (const [old, route] of Object.entries(legacyRoutes)) assert(routes.has(route), `Legacy destination missing: ${old} → ${route}`);
 for (const [endpoint, operations] of Object.entries(api.paths)) {
   for (const method of ['get', 'post', 'put', 'patch', 'delete']) {
     if (operations[method]) assert(endpointConnections.has(`${method.toUpperCase()} ${endpoint}`), `API endpoint missing from navigation: ${method} ${endpoint}`);
   }
 }
-console.log(`Validated ${paths.length} MDX pages, navigation, ${links.length} links, ${examples} JSON/YAML examples, site schema, and ${Object.keys(api.paths).length} API endpoints.`);
+console.log(`Validated ${paths.length} MDX pages, navigation, ${links.length} links, ${examples} JSON/YAML examples, site schema, and ${endpointConnections.size} API operations.`);

@@ -1,0 +1,26 @@
+---
+title: "Review what AegisRunner learned"
+description: "Confirm observed app facts, judge check quality, and guide exploration with scan hints."
+---
+
+Open **Project setup → What AegisRunner learned** to inspect the app knowledge and check history available for your project.
+
+## Review learned facts
+
+Inspect the scope, role, source, confidence, and observed behavior of a fact. Confirm it when it matches your app and correct or unconfirm an interpretation that is wrong.
+
+An inferred page purpose or action is different from a guarantee you have explicitly supplied. Review facts for the role that was scanned rather than assuming every user sees the same workflow.
+
+## Judge check quality
+
+Review a check pattern's results and available examples. Mark a confirmed real problem or a false alarm only after examining the application evidence.
+
+A failed run does not by itself establish whether the app or the test was wrong. These judgments help you separate useful checks from noisy expectations.
+
+## Supply scan hints
+
+Use the available scan-hints section to describe important paths, expected business behavior, and workflows that need particular preparation. Give concrete steps, roles, and outcomes rather than a vague instruction to test everything.
+
+For example: `As a Customer, create a draft request. As an Admin, open the requests list and verify the same reference and requested amount.`
+
+Save the hint and run the relevant exploration or test. Review the resulting behavior and evidence; saving a hint alone does not prove that the workflow was reached.

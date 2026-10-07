@@ -1,0 +1,162 @@
+[
+  {
+    "title": "List projects",
+    "path": "api-reference/platform/list-projects",
+    "method": "GET",
+    "openapi": "api-reference/openapi.yaml GET /projects",
+    "openapi-mode": "auto",
+    "tag": "Projects"
+  },
+  {
+    "title": "Create a project",
+    "path": "api-reference/platform/create-project",
+    "method": "POST",
+    "openapi": "api-reference/openapi.yaml POST /projects",
+    "openapi-mode": "auto",
+    "tag": "Projects"
+  },
+  {
+    "title": "Get a project",
+    "path": "api-reference/platform/get-project",
+    "method": "GET",
+    "openapi": "api-reference/openapi.yaml GET /projects/{projectId}",
+    "openapi-mode": "auto",
+    "tag": "Projects"
+  },
+  {
+    "title": "List project suites",
+    "path": "api-reference/platform/list-suites",
+    "method": "GET",
+    "openapi": "api-reference/openapi.yaml GET /projects/{projectId}/suites",
+    "openapi-mode": "auto",
+    "tag": "Suites and cases"
+  },
+  {
+    "title": "Create a custom suite",
+    "path": "api-reference/platform/create-suite",
+    "method": "POST",
+    "openapi": "api-reference/openapi.yaml POST /projects/{projectId}/custom-suites",
+    "openapi-mode": "auto",
+    "tag": "Suites and cases"
+  },
+  {
+    "title": "List suite cases",
+    "path": "api-reference/platform/list-cases",
+    "method": "GET",
+    "openapi": "api-reference/openapi.yaml GET /suites/{suiteId}/cases",
+    "openapi-mode": "auto",
+    "tag": "Suites and cases"
+  },
+  {
+    "title": "Create a test case",
+    "path": "api-reference/platform/create-case",
+    "method": "POST",
+    "openapi": "api-reference/openapi.yaml POST /suites/{suiteId}/cases",
+    "openapi-mode": "auto",
+    "tag": "Suites and cases"
+  },
+  {
+    "title": "Get a test case",
+    "path": "api-reference/platform/get-case",
+    "method": "GET",
+    "openapi": "api-reference/openapi.yaml GET /cases/{caseId}",
+    "openapi-mode": "auto",
+    "tag": "Suites and cases"
+  },
+  {
+    "title": "Review a test case",
+    "path": "api-reference/platform/review-case",
+    "method": "PUT",
+    "openapi": "api-reference/openapi.yaml PUT /cases/{caseId}/review",
+    "openapi-mode": "auto",
+    "tag": "Suites and cases"
+  },
+  {
+    "title": "Create a project test run",
+    "path": "api-reference/platform/create-run",
+    "method": "POST",
+    "openapi": "api-reference/openapi.yaml POST /projects/{projectId}/test-runs",
+    "openapi-mode": "auto",
+    "tag": "Test runs"
+  },
+  {
+    "title": "List project test runs",
+    "path": "api-reference/platform/list-runs",
+    "method": "GET",
+    "openapi": "api-reference/openapi.yaml GET /projects/{projectId}/test-runs",
+    "openapi-mode": "auto",
+    "tag": "Test runs"
+  },
+  {
+    "title": "Get a project test run",
+    "path": "api-reference/platform/get-run",
+    "method": "GET",
+    "openapi": "api-reference/openapi.yaml GET /test-runs/{runId}",
+    "openapi-mode": "auto",
+    "tag": "Test runs"
+  },
+  {
+    "title": "Cancel a test run",
+    "path": "api-reference/platform/cancel-run",
+    "method": "POST",
+    "openapi": "api-reference/openapi.yaml POST /test-runs/{runId}/cancel",
+    "openapi-mode": "auto",
+    "tag": "Test runs"
+  },
+  {
+    "title": "Rerun a test execution",
+    "path": "api-reference/platform/rerun",
+    "method": "POST",
+    "openapi": "api-reference/openapi.yaml POST /test-runs/{runId}/rerun",
+    "openapi-mode": "auto",
+    "tag": "Test runs"
+  },
+  {
+    "title": "Export suite code",
+    "path": "api-reference/platform/export-code",
+    "method": "GET",
+    "openapi": "api-reference/openapi.yaml GET /suites/{suiteId}/export/{language}",
+    "openapi-mode": "auto",
+    "tag": "Imports and exports"
+  },
+  {
+    "title": "Export a page object project",
+    "path": "api-reference/platform/export-page-objects",
+    "method": "GET",
+    "openapi": "api-reference/openapi.yaml GET /suites/{suiteId}/export/pom",
+    "openapi-mode": "auto",
+    "tag": "Imports and exports"
+  },
+  {
+    "title": "Export a run report",
+    "path": "api-reference/platform/export-report",
+    "method": "GET",
+    "openapi": "api-reference/openapi.yaml GET /test-runs/{runId}/export/{format}",
+    "openapi-mode": "auto",
+    "tag": "Imports and exports"
+  },
+  {
+    "title": "Import test cases",
+    "path": "api-reference/platform/import-cases",
+    "method": "POST",
+    "openapi": "api-reference/openapi.yaml POST /projects/{projectId}/test-cases/import",
+    "openapi-mode": "auto",
+    "tag": "Imports and exports"
+  },
+  {
+    "title": "List project environments",
+    "path": "api-reference/platform/list-environments",
+    "method": "GET",
+    "openapi": "api-reference/openapi.yaml GET /projects/{projectId}/environments",
+    "openapi-mode": "auto",
+    "tag": "Configuration"
+  },
+  {
+    "title": "List test data sets",
+    "path": "api-reference/platform/list-data-sets",
+    "method": "GET",
+    "openapi": "api-reference/openapi.yaml GET /projects/{projectId}/test-data-sets",
+    "openapi-mode": "auto",
+    "tag": "Configuration"
+  }
+]

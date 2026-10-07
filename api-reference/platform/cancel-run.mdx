@@ -1,0 +1,12 @@
+---
+title: "Cancel a test run"
+description: "Request cancellation of a run available to the account."
+method: POST
+path: "/test-runs/{runId}/cancel"
+---
+
+Request cancellation of a run available to the account. Inspect its final state rather than treating cancellation as a successful test result.
+
+Authenticate with an account session as described in [Project and testing API](/api-reference/platform-api). Use resource IDs available to the same organization and project.
+
+For unattended pipelines, use the separately authenticated [CI endpoints](/api-reference/overview).

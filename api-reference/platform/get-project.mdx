@@ -1,0 +1,12 @@
+---
+title: "Get a project"
+description: "Read project metadata after access checks."
+method: GET
+path: "/projects/{projectId}"
+---
+
+Read project metadata after access checks. A project ID from a different organization does not grant access.
+
+Authenticate with an account session as described in [Project and testing API](/api-reference/platform-api). Use resource IDs available to the same organization and project.
+
+For unattended pipelines, use the separately authenticated [CI endpoints](/api-reference/overview).

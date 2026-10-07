@@ -1,0 +1,52 @@
+---
+title: "Project and testing API"
+description: "Use authenticated project management and test execution endpoints alongside the CI API."
+---
+
+The project and testing endpoints use an AegisRunner account session JWT. Use a project CI token for the separate [CI endpoints](/api-reference/overview).
+
+## Base URL and authentication
+
+```text
+https://app.aegisrunner.com/api/v1
+```
+
+Send the session access token as a Bearer header. Account sign-in can require email verification, an interactive security check, and two-factor authentication. Use the supported sign-in flow for the account and preserve these protections.
+
+For an unattended pipeline, use a CI token and the CLI rather than storing a person's password in the build.
+
+## Read your projects
+
+Configure `AEGIS_ACCESS_TOKEN` through your secret store, then request:
+
+```bash
+curl --fail-with-body https://app.aegisrunner.com/api/v1/projects -H "Authorization: Bearer $AEGIS_ACCESS_TOKEN"
+```
+
+Where organization selection applies, use the appropriate `orgId` query or `X-Org-ID` header for the documented operation. Membership and role checks still apply.
+
+## Create a test run
+
+Use IDs returned for the same project. This example dispatches work; it does not wait for the tests to pass:
+
+```bash
+curl --fail-with-body "https://app.aegisrunner.com/api/v1/projects/$PROJECT_ID/test-runs" -H "Authorization: Bearer $AEGIS_ACCESS_TOKEN" -H "Content-Type: application/json" -d '{"suiteIds":["YOUR_SUITE_ID"],"browserProfiles":["chromium"]}'
+```
+
+The response can describe one run or contain a `runs` array for a browser matrix. Read the returned IDs and poll the corresponding test-run endpoint. The project run API and CI status API return different response shapes; preserve their documented field names.
+
+## Supported workflow groups
+
+- Project creation and inspection.
+- Suite and case inspection, authoring, and review.
+- Test-run dispatch, status, cancellation, and rerun.
+- Environment and test-data inspection.
+- Test imports, code exports, and report exports.
+
+The endpoint pages below document these contracts. Account billing, identity-provider configuration, and internal service endpoints use their own controls and authorization.
+
+## Handle errors and retries
+
+Check the HTTP status and safe error body. A 403 indicates unavailable access or a role restriction; a 402 can indicate plan or usage requirements. Treat a missing resource or cross-project ID according to the operation's response.
+
+For write operations, a lost connection can leave the result uncertain. Check the current project or run before creating another copy. Use [Data and sharing](/account/data-and-sharing) when distributing evidence or tokens.

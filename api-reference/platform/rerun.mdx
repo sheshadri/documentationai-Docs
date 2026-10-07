@@ -1,0 +1,12 @@
+---
+title: "Rerun a test execution"
+description: "Create another execution from an existing run."
+method: POST
+path: "/test-runs/{runId}/rerun"
+---
+
+Create another execution from an existing run. Check the target, data assumptions, and returned run ID before comparing its outcome.
+
+Authenticate with an account session as described in [Project and testing API](/api-reference/platform-api). Use resource IDs available to the same organization and project.
+
+For unattended pipelines, use the separately authenticated [CI endpoints](/api-reference/overview).

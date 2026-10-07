@@ -1,0 +1,12 @@
+---
+title: "Review a test case"
+description: "Set a case review state after checking its actions and expectations."
+method: PUT
+path: "/cases/{caseId}/review"
+---
+
+Set a case review state after checking its actions and expectations. Approval is separate from the needs_review outcome of an execution.
+
+Authenticate with an account session as described in [Project and testing API](/api-reference/platform-api). Use resource IDs available to the same organization and project.
+
+For unattended pipelines, use the separately authenticated [CI endpoints](/api-reference/overview).

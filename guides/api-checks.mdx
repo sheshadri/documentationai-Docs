@@ -1,0 +1,25 @@
+---
+title: "API checks inside a workflow"
+description: "Add an HTTP request to a web test and inspect API errors found during scans."
+---
+
+AegisRunner can report network/API failures observed during app testing. You can also add an API request as a test step when your workflow needs an explicit HTTP check.
+
+## Add an API request step
+
+1. Select a suite and choose **Add Test Case**, or edit an existing step.
+2. Choose **API request** from the action list.
+3. Enter the target endpoint URL.
+4. Supply the request method and value in the format shown by the editor, such as `POST {"name":"example"}`.
+5. Save and run a focused case.
+6. Inspect the request, response, and failure details recorded for the step.
+
+Use a test API endpoint and appropriate access configuration. A successful HTTP response should be paired with the expected application behavior or returned value for your workflow.
+
+## Investigate observed API failures
+
+In Issues, an API request failure is different from a page navigation failure. A page may render while an API call needed by a control returns an error.
+
+Inspect the endpoint, status, affected action, and environment. Reproduce the issue as the same account role, then rerun after correcting the cause.
+
+AegisRunner's automation API is documented in [API overview](/api-reference/overview). An API step here targets your application; a CI token authenticates against AegisRunner.

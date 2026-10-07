@@ -53,7 +53,7 @@ Useful source locations in the application repository:
 
 The old application `openapi-v1.yaml` contains placeholder hosts and older contracts;
 it is not copied into the customer API reference. The published specification
-covers the three implemented CI automation endpoints and their common fields.
+covers implemented CI automation and authenticated project/testing operations.
 Each endpoint has an explicit MDX page with a page-level OpenAPI connection in
 `documentation.json`; the checker requires every published operation to appear
 in navigation.
@@ -69,3 +69,5 @@ Local checks do not reproduce Documentation.AI's hosted renderer. Inspect the
 platform's branch preview, including API navigation, tables, cards, logos, and
 mobile layout, before merging. No Documentation.AI API key is needed to edit or
 review this repository through GitHub.
+
+The legacy-route map in `scripts/legacy-doc-routes.json` records destinations for retired marketing/app documentation URLs. Each destination must have a navigable page. Account/session endpoints and CI-token endpoints have separate authentication schemes.

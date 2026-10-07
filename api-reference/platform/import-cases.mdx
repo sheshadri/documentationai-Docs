@@ -1,0 +1,12 @@
+---
+title: "Import test cases"
+description: "Import a CSV or JSON test library into a project."
+method: POST
+path: "/projects/{projectId}/test-cases/import"
+---
+
+Import a CSV or JSON test library into a project. Files are currently capped at 5 MB, 500 cases, and 200 steps per case. Review imported targets and assertions before running them.
+
+Authenticate with an account session as described in [Project and testing API](/api-reference/platform-api). Use resource IDs available to the same organization and project.
+
+For unattended pipelines, use the separately authenticated [CI endpoints](/api-reference/overview).
