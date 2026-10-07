@@ -1,0 +1,26 @@
+---
+title: "Troubleshoot testing and integrations"
+description: "Resolve failures in access data execution notifications and CI."
+---
+
+Identify the failing stage: starting work, reaching the app, generating cases, executing tests, or delivering an integration event.
+
+| Symptom | First checks |
+| --- | --- |
+| Only a login screen was reached | Verify App access, target environment, and permissions. |
+| A generated test fails | Inspect its first failed step and compare the expectation with evidence. |
+| A locator stopped working | Run triage, review auto-heal, and rerun after changes. |
+| A data-driven run changes behavior | Check enabled rows, unique values, and earlier case state. |
+| A mobile build will not start | Check platform, installation requirements, backend reachability, and device capacity. |
+| A notification is missing | Check channel enablement, selected events, permissions, and the test action. |
+| CI returns 401 or 402 | Check the project token, entitlement, and usage. |
+| Changed-route selection is empty | Review resolved paths and select the intended suite directly. |
+| Visual comparisons are noisy | Compare the same viewport, role, data, and stable content. |
+
+## Preserve evidence
+
+Keep the project, scan or run ID, approximate time and timezone, environment, and safe error text. Avoid repeatedly starting broad work while an earlier copy is active.
+
+Use [Failure triage](/guides/failure-triage), [Login troubleshooting](/help-center/troubleshooting/login-failed), or [Mobile troubleshooting](/help-center/troubleshooting/mobile-scan).
+
+For an unresolved problem, [contact support](/help-center). Remove passwords, tokens, sessions, and payment details from screenshots and messages.

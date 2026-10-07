@@ -1,0 +1,52 @@
+---
+title: "Import tests and export code"
+description: "Bring CSV or JSON cases into a project and export Playwright, page objects, or Appium tests."
+---
+
+You can bring existing cases into a project and export supported suites as code. Report exports from a completed run are covered separately in [Results](/guides/results).
+
+## Import web test cases
+
+1. Open Tests and choose **Import tests**.
+2. Upload a CSV or JSON file.
+3. Select Auto-detect, CSV, or JSON, and optionally set the suite name and page URL.
+4. Import, inspect the created cases, and run a small selection.
+
+A JSON file describes one suite and its cases:
+
+```json
+{
+  "suite": {
+    "name": "Account checks",
+    "page_url": "https://staging.example.com/account"
+  },
+  "cases": [
+    {
+      "name": "Account heading is visible",
+      "priority": "high",
+      "steps": [
+        {"action": "navigate", "target": "https://staging.example.com/account"}
+      ],
+      "assertions": [
+        {"type": "visible", "target": "h1", "message": "The account heading should appear"}
+      ]
+    }
+  ]
+}
+```
+
+CSV columns include `suite_name`, `case_name`, `description`, `priority`, `steps`, and `assertions`. The last two contain JSON arrays, so escape quotes according to CSV rules. One row represents a case. The importer currently caps files at 5 MB, 500 cases, and 200 steps per case.
+
+Configure protected-page access through [App access](/guides/authentication). Importing a file does not establish that its targets or assertions work.
+
+## Export a web suite
+
+Select a suite and open **Export → Playwright test (.spec.ts)**. Review the generated code and download it. Install the required Playwright dependencies in your own repository and configure the environment and test credentials before running it.
+
+**Page Object Model project (.zip)** is available for eligible suites and plans. It includes page objects, tests, and configuration. A suite without generated page-object code may not have this export.
+
+## Import or export mobile code
+
+For native mobile suites, **Import Appium** accepts an Appium test for conversion. Inspect the resulting actions and app/device configuration before execution.
+
+The mobile suite's Export menu provides an Appium/WebdriverIO file. Browser-only Playwright code and native Appium code use different execution environments; use the appropriate export for the suite's surface.

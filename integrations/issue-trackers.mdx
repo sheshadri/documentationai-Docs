@@ -1,0 +1,31 @@
+---
+title: "GitHub Issues and Jira"
+description: "Connect an issue destination and control automation for failed tests."
+---
+
+Open **Project setup → Integrations** in the project whose results should create issues. Configure the destination before enabling automatic issue creation.
+
+## Connect GitHub
+
+1. Create a GitHub token with access to the intended repository and permission to create and update issues.
+2. Select GitHub in AegisRunner.
+3. Enter the token and repository as `owner/repository`.
+4. Choose whether failures should open issues and passing tests should close them.
+5. Review pull-request comments and commit-status options separately.
+6. Save and verify the destination with a controlled failure.
+
+Pull-request comments and commit statuses require their applicable permissions. Review [GitHub token guidance](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) and your organization policy when choosing the token.
+
+## Connect Jira
+
+1. Obtain an API token for an account that can create issues in the target project or space.
+2. Select Jira in AegisRunner.
+3. Enter the Jira host, account email, token, and destination key.
+4. Set issue creation and resolution switches.
+5. Save and check a controlled failure reaches the destination.
+
+Use the short destination key, such as `QA`, rather than its display name. The account email and token are used together. See [Atlassian authentication guidance](https://developer.atlassian.com/cloud/jira/platform/basic-auth-for-rest-apis/).
+
+## Maintain the connection
+
+Check token expiration, repository access, and destination changes when automation stops working. Keep credentials in integration settings. Inspect the actual issues and run evidence; a display family does not by itself establish the external issue grouping.

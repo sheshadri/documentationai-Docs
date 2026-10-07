@@ -1,0 +1,12 @@
+---
+title: "Create a project test run"
+description: "Dispatch a test run asynchronously."
+method: POST
+path: "/projects/{projectId}/test-runs"
+---
+
+Dispatch a test run asynchronously. A single-browser request can return one run; a browser matrix can return a runs array. Retain returned IDs and inspect execution results.
+
+Authenticate with an account session as described in [Project and testing API](/api-reference/platform-api). Use resource IDs available to the same organization and project.
+
+For unattended pipelines, use the separately authenticated [CI endpoints](/api-reference/overview).

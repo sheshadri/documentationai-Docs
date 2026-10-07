@@ -1,0 +1,31 @@
+---
+title: "Set up SAML single sign-on"
+description: "Connect an identity provider and validate organization sign-in before enforcement."
+---
+
+Open **Account settings → Single sign-on** to configure SAML for the organization when the feature is available on your plan.
+
+## Register AegisRunner with your identity provider
+
+1. Copy the **SP entity ID**, **ACS URL**, and **Metadata URL** displayed in AegisRunner.
+2. Create or configure the SAML application in your identity provider using those values.
+3. Obtain the provider's entity ID, SSO URL, and X.509 signing certificate.
+
+Use the URLs shown for your organization. Do not substitute a guessed `/sso/acs` address or another organization's metadata.
+
+## Save the provider details
+
+Enter the provider's entity ID, SSO URL, optional SLO URL, and certificate. Review allowed email domains, the default role, and auto-provisioning options before saving.
+
+Auto-provisioning can create organization membership for eligible users. Confirm that the domains and default role match your organization's access policy.
+
+## Validate and enforce
+
+1. Save the configuration and run its validation control.
+2. Complete a real sign-in as an intended user in a separate browser session.
+3. Confirm the organization and role assigned after sign-in.
+4. Enable enforcement only after the sign-in works and you have a verified administrator access path.
+
+Configuration validation and a completed SAML round trip establish different things; test both.
+
+If sign-in fails, check entity identifiers, ACS URL, certificate validity, identity-provider assignments, and allowed domains. Use [Support](/help-center) with safe error text rather than sending certificates' private keys or authentication assertions.

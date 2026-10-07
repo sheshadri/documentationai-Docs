@@ -1,0 +1,40 @@
+---
+title: "Custom notification webhooks"
+description: "Receive run events in your service and verify their signature."
+---
+
+A custom webhook sends notifications from AegisRunner to your service. Deployment webhooks send provider events in the opposite direction.
+
+## Configure the receiver
+
+1. Create an HTTPS endpoint that accepts JSON.
+2. Open **Project setup → Notifications → Webhook**.
+3. Enter the receiver URL and an optional shared secret.
+4. Enable the relevant events and the channel.
+5. Save and use its test action.
+6. Inspect a real event to confirm your receiver's handling.
+
+## Verify the signature
+
+When a secret is configured, run notifications include `X-AegisRunner-Signature`: `sha256=` followed by a hexadecimal HMAC-SHA256 digest of the raw request body.
+
+Verify original bytes before parsing or rewriting JSON:
+
+```python
+import hashlib
+import hmac
+
+expected = "sha256=" + hmac.new(
+    shared_secret.encode("utf-8"), raw_request_body, hashlib.sha256
+).hexdigest()
+if not hmac.compare_digest(expected, received_signature):
+    raise ValueError("Invalid webhook signature")
+```
+
+Reformatted JSON has different bytes. Store the secret in your receiver's secret store and compare signatures without logging it.
+
+## Handle delivery
+
+Inspect the payload and return an appropriate successful HTTP response after accepting it. Make downstream actions safe to repeat because transport retries can cause another delivery.
+
+Log safe event identifiers and errors. If delivery fails, check endpoint reachability, signature handling, and response status before changing the event configuration.

@@ -1,0 +1,34 @@
+---
+title: "Failure triage and auto-heal"
+description: "Investigate a failed run, group likely causes, and repair broken locators."
+---
+
+Start with the failed case's evidence. Decide whether the failure comes from the app, test expectations, access, data, or execution setup before changing the test.
+
+## Inspect the first failure
+
+1. Open Runs and select the execution.
+2. Filter to failed or needs-review cases.
+3. Open the first failing step and compare expected behavior with the screenshot and error.
+4. Check the account role, environment, and test data.
+5. Reproduce the affected workflow and record the cause.
+
+Repeated failures can share an upstream cause, such as an expired login or an unavailable API.
+
+## Run AI triage
+
+Use **Triage** where available to analyze failed cases and group likely causes. Wait for the analysis and review its conclusions against the evidence.
+
+Triage uses generation capacity and the project's feature entitlements. Its explanation is a suggestion to investigate, not a confirmed application defect.
+
+## Repair a locator
+
+After triage, use **Auto-heal** where available to inspect broken targets and update selectors. This changes the saved test steps.
+
+Review the proposed or updated target and rerun the affected case. A locator that now resolves must still point to the intended control. Do not use auto-heal to remove a meaningful behavior assertion.
+
+## Verify the correction
+
+Use **Re-run failed only** to recheck failed and needs-review cases, then run the related workflow if the fix affects more than one step.
+
+Approval of a trusted test and the execution's needs-review state serve different purposes. See [Create and edit tests](/guides/authoring-tests).

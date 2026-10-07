@@ -1,0 +1,38 @@
+---
+title: "Data-driven tests and CSV examples"
+description: "Run form tests with reusable data rows and verify the outcome for each row."
+---
+
+A data-driven run repeats a form test with multiple enabled rows. Use it for valid and invalid inputs, role-specific records, or required-field variations.
+
+## Prepare form examples
+
+1. Open a scanned page's Forms view.
+2. Choose **Export CSV** to obtain the exact column names for the detected form.
+3. Fill in rows with test values that your environment can use.
+4. Import the CSV and review the resulting examples.
+5. Enable the rows that should participate.
+
+For example, a form with `name` and `email` fields might accept:
+
+```csv
+name,email
+Example Customer,customer@example.test
+Second Customer,second@example.test
+```
+
+Use the exported headers rather than inventing names from the labels you see on screen. Check the detected form and source page if values land in the wrong fields.
+
+## Manage reusable values
+
+In **Project setup → Test data**, create or edit a named data set. Choose a default when it should be the usual run input. You can maintain role-specific sets and edit individual form rows.
+
+Put credentials in App access and secrets in Variables and secrets. Avoid placing production passwords in a CSV intended for sharing.
+
+## Execute a data-driven run
+
+Open the run options in Tests, select the environment and data set, and enable **Data-driven**. Review the selected suite, then run it.
+
+The current form-run option uses up to 25 enabled rows. A workflow that creates data can create a record for each row, so prepare unique identifiers and cleanup for your staging environment.
+
+Inspect row-specific failures and saved values. A form submit acknowledgment alone does not prove that the data was persisted correctly; see [Persistence checks](/guides/persistence-checks).

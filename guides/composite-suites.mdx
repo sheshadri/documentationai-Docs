@@ -1,0 +1,29 @@
+---
+title: "User journeys and composite suites"
+description: "Create a workflow across pages or group reviewed suites for one execution."
+---
+
+A user journey exercises a sequence of pages. A composite suite organizes existing tests into a larger check. Choose the approach that matches what you need to verify.
+
+## Generate a journey across pages
+
+1. Complete a scan that reaches the pages in your workflow.
+2. Open Tests and choose **User Flow**.
+3. Name and describe the desired outcome.
+4. Select at least two discovered pages in the intended sequence.
+5. Generate the flow and review its cases, inputs, and expected outcomes.
+6. Run it against the same environment and role.
+
+Describe a business outcome, such as creating an order and seeing it in account history. Simply visiting several pages does not verify that data moved between them.
+
+## Group existing suites
+
+Use **Merge suites** from the Tests actions where available. Give the composite a name, select at least two suites, and create it. Review the included items and their order before running the composite.
+
+Grouping does not repair a case's credentials, data assumptions, or selectors. Check each child suite first. For workflows that depend on state from an earlier test, inspect the execution and session behavior before scheduling the combined suite.
+
+## Maintain the group
+
+Revisit the composite when a child suite changes or is regenerated. Disable or replace outdated cases deliberately and run the affected group again.
+
+For a workflow involving different roles or native apps, use [Cross-role and web and mobile tests](/guides/cross-surface-testing).

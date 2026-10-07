@@ -1,0 +1,32 @@
+---
+title: "Deployment-triggered testing"
+description: "Connect Vercel Netlify or GitLab deployment events to regression checks."
+---
+
+Open **Project setup → CI/CD** and select the provider. Use the webhook URL and verification settings displayed for this project.
+
+## Vercel
+
+Configure a webhook for the intended project or team and select the successful-deployment event. Use the URL shown in AegisRunner, deploy a staging change, and inspect the resulting run.
+
+Review [Vercel webhook settings](https://vercel.com/docs/webhooks) for current event, plan, and permission requirements.
+
+## Netlify
+
+Configure an outgoing notification for the successful-deploy event using the AegisRunner URL. Review its verification settings. Confirm that the deployment is reachable and inspect the started run.
+
+Use Netlify's current build/deploy notification controls for the site you intend to test.
+
+## GitLab
+
+Configure the relevant pipeline or deployment webhook event using the AegisRunner URL and required verification settings. Test it with the intended event and review its run.
+
+Alternatively, run the CLI in a GitLab job and publish JUnit artifacts; see [CI pipelines](/automation/ci-cd).
+
+## Validate scope and timing
+
+Check the target URL, suites, environment, and role in the resulting run. A successful deployment event does not establish that the app is reachable or that its tests passed.
+
+If both a provider webhook and a CI job trigger the same suites, one deployment can start duplicate runs. Choose the intended trigger.
+
+Scans discover changes and runs execute existing suites. Review the integration's re-scan and auto-retest options so its behavior matches your release process.

@@ -1,33 +1,36 @@
 openapi: 3.0.3
 info:
-  title: AegisRunner Automation API
+  title: AegisRunner Project and Automation API
   version: 1.0.0
-  description: >-
-    Project-scoped CI automation. Trigger runs and scans, retrieve run results,
-    and stream scan progress. This reference covers CI-token endpoints, not the
-    full session-authenticated dashboard API.
+  description: Project testing, evidence exports, and CI automation. CI endpoints use project trigger
+    tokens; project management and testing endpoints use an authenticated account session JWT. Resource
+    access, roles, plan entitlements, and usage checks still apply.
   contact:
     name: AegisRunner support
     email: support@aegisrunner.com
 servers:
-  - url: https://app.aegisrunner.com/api/v1
-    description: AegisRunner cloud
+- url: https://app.aegisrunner.com/api/v1
+  description: AegisRunner cloud
 security:
-  - ciToken: []
+- ciToken: []
 tags:
-  - name: CI automation
-    description: Trigger and follow project testing work.
+- name: CI automation
+  description: Trigger and follow project testing work.
+- name: Projects
+- name: Suites and cases
+- name: Test runs
+- name: Imports and exports
+- name: Configuration
 paths:
   /ci/trigger:
     post:
-      tags: [CI automation]
+      tags:
+      - CI automation
       summary: Trigger a run or scan
       operationId: triggerWork
-      description: >-
-        Requires a Pro or Business project. Choose one workflow per request.
-        Returns immediately; use run polling or scan events for completion.
-        No idempotency key is supported. Check the dashboard before retrying an
-        uncertain trigger. Only common automation fields are listed here.
+      description: Requires a Pro or Business project. Choose one workflow per request. Returns immediately;
+        use run polling or scan events for completion. No idempotency key is supported. Check the dashboard
+        before retrying an uncertain trigger. Only common automation fields are listed here.
       requestBody:
         required: true
         content:
@@ -38,7 +41,8 @@ paths:
               run:
                 summary: Run selected suites
                 value:
-                  suiteIds: [00000000-0000-4000-8000-000000000001]
+                  suiteIds:
+                  - 00000000-0000-4000-8000-000000000001
                   browserProfile: chromium
               scan:
                 summary: Scan the configured website
@@ -64,13 +68,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/RunCreated'
         '202':
-          description: Scan accepted. Website scans return crawl_id; mobile scans do not return a run ID.
+          description: Scan accepted. Website scans return crawl_id; mobile scans do not return a run
+            ID.
           content:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/CrawlStarted'
-                  - $ref: '#/components/schemas/MobileAccepted'
+                - $ref: '#/components/schemas/CrawlStarted'
+                - $ref: '#/components/schemas/MobileAccepted'
         '400':
           description: Invalid body, target domain, or project-owned IDs.
         '401':
@@ -83,20 +88,20 @@ paths:
           description: Unexpected error. Check existing work before retrying a trigger.
   /ci/runs/{runId}:
     get:
-      tags: [CI automation]
+      tags:
+      - CI automation
       summary: Get run status
       operationId: getRunStatus
-      description: >-
-        Poll a run from the token project until isFinished is true. Inspect status
-        and failedCases as well as exitCode. needs_review is terminal and
-        non-blocking when no cases failed. Handle cancelled explicitly.
+      description: Poll a run from the token project until isFinished is true. Inspect status and failedCases
+        as well as exitCode. needs_review is terminal and non-blocking when no cases failed. Handle cancelled
+        explicitly.
       parameters:
-        - name: runId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
+      - name: runId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
       responses:
         '200':
           description: Current run state and available case results.
@@ -110,22 +115,21 @@ paths:
           description: Run does not exist or belongs to a different project.
   /ci/crawls/{crawlId}/events:
     get:
-      tags: [CI automation]
+      tags:
+      - CI automation
       summary: Stream scan progress
       operationId: streamScanProgress
-      description: >-
-        Use crawl_id from a website scan response. The stream starts with connected,
-        carries discovery and generation events, and ends with done containing
-        result=completed or failed. It can emit timeout after 30 minutes. Reconnecting
-        after completion returns connected followed by done. A disconnect or timeout
-        is not evidence of success. Progress payloads vary by event.
+      description: Use crawl_id from a website scan response. The stream starts with connected, carries
+        discovery and generation events, and ends with done containing result=completed or failed. It
+        can emit timeout after 30 minutes. Reconnecting after completion returns connected followed by
+        done. A disconnect or timeout is not evidence of success. Progress payloads vary by event.
       parameters:
-        - name: crawlId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
+      - name: crawlId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
       responses:
         '200':
           description: Server-Sent Events with JSON data. Comment lines are keepalives.
@@ -133,34 +137,829 @@ paths:
             text/event-stream:
               schema:
                 type: string
-              example: |
-                event: connected
+              example: 'event: connected
+
                 data: {"crawl_id":"00000000-0000-4000-8000-000000000002","status":"running"}
 
+
                 event: done
+
                 data: {"crawl_id":"00000000-0000-4000-8000-000000000002","result":"completed"}
+
+                '
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
           description: Scan does not exist or belongs to a different project.
         '503':
           description: Live scan updates are unavailable.
+  /projects:
+    get:
+      tags:
+      - Projects
+      summary: List projects
+      operationId: list_projects
+      description: List projects available to the account. Select an organization where needed and preserve
+        the returned list and pagination structure.
+      security:
+      - accountSession: []
+      responses:
+        '200':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collection'
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      parameters:
+      - name: orgId
+        in: query
+        schema:
+          type: string
+          format: uuid
+    post:
+      tags:
+      - Projects
+      summary: Create a project
+      operationId: create_project
+      description: Create a project in an organization where the account has the necessary role. The website
+        field is base_url; account creation and testing authorization are separate steps.
+      security:
+      - accountSession: []
+      responses:
+        '201':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectCreate'
+  /projects/{projectId}:
+    get:
+      tags:
+      - Projects
+      summary: Get a project
+      operationId: get_project
+      description: Read project metadata after access checks. A project ID from a different organization
+        does not grant access.
+      security:
+      - accountSession: []
+      responses:
+        '200':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+  /projects/{projectId}/suites:
+    get:
+      tags:
+      - Suites and cases
+      summary: List project suites
+      operationId: list_suites
+      description: Inspect the suites available for a project and choose IDs for a focused run.
+      security:
+      - accountSession: []
+      responses:
+        '200':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collection'
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+      - name: perPage
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+  /projects/{projectId}/custom-suites:
+    post:
+      tags:
+      - Suites and cases
+      summary: Create a custom suite
+      operationId: create_suite
+      description: Create a named suite with optional description, page anchor, and tags. Review its cases
+        before executing it.
+      security:
+      - accountSession: []
+      responses:
+        '201':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuiteCreate'
+  /suites/{suiteId}/cases:
+    get:
+      tags:
+      - Suites and cases
+      summary: List suite cases
+      operationId: list_cases
+      description: Read cases belonging to a suite available to the account.
+      security:
+      - accountSession: []
+      responses:
+        '200':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collection'
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      parameters:
+      - name: suiteId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    post:
+      tags:
+      - Suites and cases
+      summary: Create a test case
+      operationId: create_case
+      description: Create a case in a suite with the appropriate project write role. Steps can be supplied
+        with the case; verify their targets and expected behavior before running it.
+      security:
+      - accountSession: []
+      responses:
+        '201':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      parameters:
+      - name: suiteId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaseCreate'
+  /cases/{caseId}:
+    get:
+      tags:
+      - Suites and cases
+      summary: Get a test case
+      operationId: get_case
+      description: Read a case and the available step details for its project.
+      security:
+      - accountSession: []
+      responses:
+        '200':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+  /cases/{caseId}/review:
+    put:
+      tags:
+      - Suites and cases
+      summary: Review a test case
+      operationId: review_case
+      description: Set a case review state after checking its actions and expectations. Approval is separate
+        from the needs_review outcome of an execution.
+      security:
+      - accountSession: []
+      responses:
+        '200':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      parameters:
+      - name: caseId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaseReview'
+  /projects/{projectId}/test-runs:
+    post:
+      tags:
+      - Test runs
+      summary: Create a project test run
+      operationId: create_run
+      description: Dispatch a test run asynchronously. A single-browser request can return one run; a
+        browser matrix can return a runs array. Retain returned IDs and inspect execution results.
+      security:
+      - accountSession: []
+      responses:
+        '201':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectRunCreated'
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectRunRequest'
+    get:
+      tags:
+      - Test runs
+      summary: List project test runs
+      operationId: list_runs
+      description: Read project execution history. Check target, browser, environment, and selection before
+        comparing outcomes.
+      security:
+      - accountSession: []
+      responses:
+        '200':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collection'
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+      - name: perPage
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+  /test-runs/{runId}:
+    get:
+      tags:
+      - Test runs
+      summary: Get a project test run
+      operationId: get_run
+      description: Read the run detail and available result metadata. Dispatching a run and completing
+        it successfully are separate outcomes.
+      security:
+      - accountSession: []
+      responses:
+        '200':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunDetail'
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      parameters:
+      - name: runId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+  /test-runs/{runId}/cancel:
+    post:
+      tags:
+      - Test runs
+      summary: Cancel a test run
+      operationId: cancel_run
+      description: Request cancellation of a run available to the account. Inspect its final state rather
+        than treating cancellation as a successful test result.
+      security:
+      - accountSession: []
+      responses:
+        '200':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      parameters:
+      - name: runId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+  /test-runs/{runId}/rerun:
+    post:
+      tags:
+      - Test runs
+      summary: Rerun a test execution
+      operationId: rerun
+      description: Create another execution from an existing run. Check the target, data assumptions,
+        and returned run ID before comparing its outcome.
+      security:
+      - accountSession: []
+      responses:
+        '200':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      parameters:
+      - name: runId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+  /suites/{suiteId}/export/{language}:
+    get:
+      tags:
+      - Imports and exports
+      summary: Export suite code
+      operationId: export_code
+      description: Export supported web or native mobile test source. Use Playwright for a web suite and
+        Appium for a native mobile suite.
+      security:
+      - accountSession: []
+      responses:
+        '200':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodeExport'
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      parameters:
+      - name: suiteId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: language
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - playwright
+          - appium
+  /suites/{suiteId}/export/pom:
+    get:
+      tags:
+      - Imports and exports
+      summary: Export a page object project
+      operationId: export_page_objects
+      description: Download a generated page-object project for an eligible suite and plan. Suites without
+        page-object code can return 404.
+      security:
+      - accountSession: []
+      responses:
+        '200':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      parameters:
+      - name: suiteId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+  /test-runs/{runId}/export/{format}:
+    get:
+      tags:
+      - Imports and exports
+      summary: Export a run report
+      operationId: export_report
+      description: Download a run report in CSV, JUnit XML, HTML, or PDF. Review evidence before sharing
+        the downloaded file.
+      security:
+      - accountSession: []
+      responses:
+        '200':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            text/csv:
+              schema:
+                type: string
+            application/xml:
+              schema:
+                type: string
+            text/html:
+              schema:
+                type: string
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      parameters:
+      - name: runId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: format
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - csv
+          - junit
+          - html
+          - pdf
+  /projects/{projectId}/test-cases/import:
+    post:
+      tags:
+      - Imports and exports
+      summary: Import test cases
+      operationId: import_cases
+      description: Import a CSV or JSON test library into a project. Files are currently capped at 5 MB,
+        500 cases, and 200 steps per case. Review imported targets and assertions before running them.
+      security:
+      - accountSession: []
+      responses:
+        '201':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                format:
+                  type: string
+                  enum:
+                  - auto
+                  - csv
+                  - json
+                suite_name:
+                  type: string
+                page_url:
+                  type: string
+                  format: uri
+              required:
+              - file
+  /projects/{projectId}/environments:
+    get:
+      tags:
+      - Configuration
+      summary: List project environments
+      operationId: list_environments
+      description: Inspect configured environments before selecting an environmentId for a run. Keep secret
+        values in their supported secret configuration.
+      security:
+      - accountSession: []
+      responses:
+        '200':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collection'
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+  /projects/{projectId}/test-data-sets:
+    get:
+      tags:
+      - Configuration
+      summary: List test data sets
+      operationId: list_data_sets
+      description: Inspect reusable test data sets belonging to the project before selecting a testDataSetId.
+      security:
+      - accountSession: []
+      responses:
+        '200':
+          description: Successful response. Inspect returned resources and asynchronous work state as
+            applicable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collection'
+        '400':
+          description: Invalid request or resource selection.
+        '401':
+          description: Missing or invalid account session.
+        '403':
+          description: Unavailable resource access or role permission.
+        '404':
+          description: Resource not found or unavailable to the account.
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+      parameters:
+      - name: projectId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
 components:
   securitySchemes:
     ciToken:
       type: http
       scheme: bearer
       description: Create a project token under Project setup → CI/CD.
+    accountSession:
+      type: http
+      scheme: bearer
+      description: AegisRunner account session access token. Complete the supported sign-in, security
+        verification, and two-factor flow as required.
   responses:
     Unauthorized:
       description: Missing, invalid, expired, or revoked CI token.
   schemas:
     TriggerRequest:
       type: object
-      description: >-
-        Choose existing test execution, crawl=true for a website scan, or mobileScan.
-        If no cases or suites are selected, the API prefers latest-scan suites and
-        falls back to project suites. The wait field is not a server-side wait mechanism.
+      description: Choose existing test execution, crawl=true for a website scan, or mobileScan. If no
+        cases or suites are selected, the API prefers latest-scan suites and falls back to project suites.
+        The wait field is not a server-side wait mechanism.
       properties:
         suiteIds:
           type: array
@@ -203,7 +1002,9 @@ components:
           description: Requested full-scan navigation depth.
         device:
           type: string
-          enum: [desktop, mobile]
+          enum:
+          - desktop
+          - mobile
           description: Device mode for a full website scan.
         authRole:
           type: string
@@ -212,7 +1013,9 @@ components:
         credentials:
           type: object
           description: Full-scan target credentials. Saved to the project for future scans and runs.
-          required: [username, password]
+          required:
+          - username
+          - password
           properties:
             username:
               type: string
@@ -233,7 +1036,9 @@ components:
           type: string
         platform:
           type: string
-          enum: [android, ios]
+          enum:
+          - android
+          - ios
         role:
           type: string
           description: Saved app login role.
@@ -245,11 +1050,17 @@ components:
           description: Requested OS version.
         engine:
           type: string
-          enum: [emulator, '']
+          enum:
+          - emulator
+          - ''
           description: Use emulator for Android emulator execution; omit for real-device execution.
     RunCreated:
       type: object
-      required: [id, project_id, status, dashboardUrl]
+      required:
+      - id
+      - project_id
+      - status
+      - dashboardUrl
       properties:
         id:
           type: string
@@ -277,11 +1088,16 @@ components:
           format: uri
     CrawlStarted:
       type: object
-      required: [status, crawl_id, project_id, dashboardUrl]
+      required:
+      - status
+      - crawl_id
+      - project_id
+      - dashboardUrl
       properties:
         status:
           type: string
-          enum: [crawl_started]
+          enum:
+          - crawl_started
         crawl_id:
           type: string
           format: uuid
@@ -295,27 +1111,37 @@ components:
           format: uri
     MobileAccepted:
       type: object
-      required: [status, message]
+      required:
+      - status
+      - message
       properties:
         status:
           type: string
-          enum: [scanning]
+          enum:
+          - scanning
         message:
           type: string
     CrawlFailed:
       type: object
-      required: [status, error]
+      required:
+      - status
+      - error
       properties:
         status:
           type: string
-          enum: [crawl_failed]
+          enum:
+          - crawl_failed
         error:
           type: string
         message:
           type: string
     RunStatus:
       type: object
-      required: [id, status, isFinished, exitCode]
+      required:
+      - id
+      - status
+      - isFinished
+      - exitCode
       properties:
         id:
           type: string
@@ -327,7 +1153,9 @@ components:
           type: boolean
         exitCode:
           type: integer
-          enum: [0, 1]
+          enum:
+          - 0
+          - 1
           description: Returns 1 for failed and 0 otherwise. Also inspect failedCases and handle cancelled.
         totalCases:
           type: integer
@@ -372,3 +1200,212 @@ components:
           type: string
         failureType:
           type: string
+    Resource:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Resource identifier.
+          format: uuid
+        name:
+          type: string
+        status:
+          type: string
+      additionalProperties: true
+      description: Resource metadata. Additional fields depend on the resource and operation.
+    Collection:
+      oneOf:
+      - type: object
+        properties:
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/Resource'
+          total:
+            type: integer
+        additionalProperties: true
+      - type: array
+        items:
+          $ref: '#/components/schemas/Resource'
+      description: List payload. Preserve the endpoint response shape and any additional pagination fields.
+    ProjectCreate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Project name.
+        description:
+          type: string
+        base_url:
+          type: string
+          description: Configured target website.
+          format: uri
+        orgId:
+          type: string
+          description: Organization you can administer.
+          format: uuid
+        testingAuthorized:
+          type: boolean
+          description: Attest that the target may be tested. This does not bypass per-scan write controls.
+      required:
+      - name
+    SuiteCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        pageUrl:
+          type: string
+          description: Optional page anchor.
+          format: uri
+        tags:
+          type: array
+          items:
+            type: string
+      required:
+      - name
+    CaseCreate:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        priority:
+          type: string
+          enum:
+          - low
+          - medium
+          - high
+          - critical
+        tags:
+          type: array
+          items:
+            type: string
+        steps:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              selector:
+                oneOf:
+                - type: string
+                - type: object
+                  additionalProperties: true
+              action:
+                type: object
+                additionalProperties: true
+              assertions:
+                oneOf:
+                - type: array
+                  items:
+                    type: object
+                    additionalProperties: true
+                - type: object
+                  additionalProperties: true
+            description: Structured step data. Supply an action and selector shape supported by the selected
+              step type.
+      required:
+      - name
+    ProjectRunRequest:
+      type: object
+      properties:
+        suiteIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        caseIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        browserProfile:
+          type: string
+          description: Single browser profile.
+        browserProfiles:
+          type: array
+          items:
+            type: string
+            enum:
+            - chromium
+            - firefox
+            - webkit
+        environmentId:
+          type: string
+          format: uuid
+        testDataSetId:
+          type: string
+          format: uuid
+        selectionStrategy:
+          type: string
+        selectionParams:
+          type: object
+          properties: {}
+          additionalProperties: true
+        config:
+          type: object
+          properties:
+            baseUrl:
+              type: string
+              format: uri
+            dataDriven:
+              type: boolean
+            local:
+              type: boolean
+          additionalProperties: true
+      description: Dispatch existing project tests. Resource IDs must belong to the project. Browser-matrix
+        requests can return more than one run.
+    ProjectRunCreated:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+        runs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Resource'
+      anyOf:
+      - required:
+        - id
+      - required:
+        - runs
+      additionalProperties: true
+    CodeExport:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Exported test source.
+        filename:
+          type: string
+          description: Suggested filename.
+      additionalProperties: true
+    RunDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          description: Run state. Inspect the execution and case results before treating it as successful.
+      additionalProperties: true
+    CaseReview:
+      type: object
+      properties:
+        reviewStatus:
+          type: string
+          enum:
+          - pending
+          - approved
+          - rejected
+      required:
+      - reviewStatus

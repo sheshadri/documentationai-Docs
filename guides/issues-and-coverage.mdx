@@ -1,0 +1,30 @@
+---
+title: "Issues and coverage"
+description: "Read issue families, distinguish observations from confirmed defects, and inspect coverage gaps."
+---
+
+Issues describe findings from reached pages, screens, or test runs. Coverage describes what was exercised and what remains to check. Use both when assessing a release.
+
+## Investigate a finding
+
+Open Issues and inspect its category, severity, affected page, and available evidence. A page navigation error, failed API call, missing control behavior, and accessibility finding can require different fixes.
+
+Check the selected scan and role. A finding on a sign-in screen may be an access problem rather than a defect in the protected page you intended to test.
+
+## Review issue families
+
+Use **Issue families** to examine related findings together. Compare the shared cause and affected locations before treating every member as a separate defect.
+
+If you use an issue tracker, verify whether the integration creates an issue per failed test or another supported grouping; do not assume that the display grouping changes the external automation.
+
+## Inspect coverage
+
+Open Coverage for the intended scan or available combined view. Review covered capabilities and gaps by category. Prioritize essential workflows that were not reached or verified.
+
+A passing test count alone does not establish coverage of every role, route, or device. A skipped case or an unverified saved record should remain visible in your assessment.
+
+## Act on recommendations
+
+Open Recommendations to inspect available suggestions. Check their evidence and relevance to your app, then fix the app or improve the testing setup as appropriate.
+
+Repeat the affected checks after a change. See [Persistence checks](/guides/persistence-checks) and [Failure triage](/guides/failure-triage) for specific evidence workflows.

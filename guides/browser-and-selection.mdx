@@ -1,0 +1,33 @@
+---
+title: "Browsers and test selection"
+description: "Choose browser profiles, environments, and a focused set of tests for a run."
+---
+
+Use run options to keep execution aligned with your target environment and the change you want to check.
+
+## Select a browser
+
+Open Tests and the run-options control. Choose the available browser profiles, then review the environment and test data before starting the run.
+
+Web execution supports Chromium, Firefox, and WebKit profiles where offered. Native mobile tests use their app and device execution options. A browser's mobile viewport is different from a native app running on a phone.
+
+Compare the same browser and viewport when investigating a visual change. Include additional supported profiles when checking browser-specific behavior.
+
+## Focus the selection
+
+Use an explicit suite for a stable smoke check. Broader selections and available strategies can target recent failures, priority, or other project signals.
+
+For the changed-routes option:
+
+1. Paste changed source files and/or URL paths, one per line.
+2. Select **Preview**.
+3. Review the resolved routes and matching case count.
+4. Run the selection if it covers the intended change.
+
+An empty match does not prove the changed feature is covered elsewhere. Check the routes and run the relevant suite directly when needed.
+
+## Keep runs comparable
+
+Confirm the selected scan or catalog, suites, environment, account role, and data set. A selection can include tests from more than one surface, so inspect the run's scope before interpreting its totals.
+
+Plan concurrency and usage limits still apply. For CI, pass explicit suite IDs when the build needs a predictable release check.

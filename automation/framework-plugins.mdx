@@ -1,0 +1,118 @@
+---
+title: "Vite Nuxt and Next development workflows"
+description: "Install framework integrations or attach the CLI to your development server."
+---
+
+Connect AegisRunner to a running development server with the published Vite plugin, Nuxt module, Next wrapper, or [CLI](/automation/cli).
+
+## Prepare a token
+
+Create a project CI trigger token under **Manage → CI/CD** on Pro or Business. Supply it through `AEGIS_TOKEN` in your shell or a git-ignored environment file loaded by your development server. Never commit the token or expose it through client-prefixed environment variables.
+
+The integrations also read the credential saved by `aegis login`; see [CLI authentication](/automation/cli). The explicit `token` option takes precedence over the environment and saved credential.
+
+## Vite
+
+Install the published plugin:
+
+```bash
+npm install -D @aegisrunner/vite
+```
+
+Add it alongside your existing plugins in `vite.config.ts`:
+
+```typescript
+import { defineConfig } from 'vite'
+import aegis from '@aegisrunner/vite'
+
+export default defineConfig({
+  plugins: [
+    aegis({ token: process.env.AEGIS_TOKEN, scanOn: 'manual' }),
+  ],
+})
+```
+
+Keep your React, Vue, Svelte, or other existing Vite plugin entries. AegisRunner runs during development serving, not the production build.
+
+## Nuxt
+
+Install the module:
+
+```bash
+npm install -D @aegisrunner/nuxt
+```
+
+Add it to `nuxt.config.ts` alongside your existing modules:
+
+```typescript
+export default defineNuxtConfig({
+  modules: ['@aegisrunner/nuxt'],
+  aegis: {
+    token: process.env.AEGIS_TOKEN,
+    scanOn: 'manual',
+  },
+})
+```
+
+The module provides development controls, including its Nuxt DevTools integration. Start your usual development command and use the displayed scan control.
+
+## Next
+
+Install the wrapper:
+
+```bash
+npm install -D @aegisrunner/next
+```
+
+Wrap your existing configuration in `next.config.mjs`:
+
+```javascript
+import withAegisRunner from '@aegisrunner/next'
+
+const nextConfig = {}
+
+export default withAegisRunner(nextConfig, {
+  token: process.env.AEGIS_TOKEN,
+  scanOn: 'manual',
+})
+```
+
+Keep your existing options in `nextConfig`. The wrapper activates in development; production build phases pass through the configuration.
+
+## Start a scan
+
+Run your normal development command. Use the displayed terminal or widget controls to scan a page or the site and open results. `scanOn: 'startup'` opts into scanning when the server starts; the examples above keep scans manual.
+
+The integrations default to a local browser executor. A first scan may download Chromium. Use `runner: 'tunnel'` when you want the cloud browser to reach the server through an outbound tunnel. Local browser execution and cloud result storage are different parts of the workflow; review [Data and sharing](/account/data-and-sharing) before scanning sensitive environments.
+
+Configure the app's test login through the available scan controls when authentication is required. The CI token authenticates AegisRunner and is separate from your app's login credentials.
+
+## CLI alternative
+
+You can wrap a development command without changing framework configuration:
+
+```bash
+aegis dev --port 3000 -- npm run dev
+```
+
+For Vite's usual port:
+
+```bash
+aegis dev --port 5173 -- npm run dev
+```
+
+Keep the process running until scanning finishes. For a running server, a one-off tunnel scan is:
+
+```bash
+aegis scan --tunnel --port 3000
+```
+
+For an opt-in pre-push check using the project's reviewed tests:
+
+```bash
+aegis hooks install
+```
+
+The hook can stop a push when its check fails. Review its command and target environment before relying on it. Remove it with `aegis hooks uninstall`.
+
+Use [Local testing](/automation/local-testing) for executor and network setup, and [CI/CD](/automation/ci-cd) for automated gates.

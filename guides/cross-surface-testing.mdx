@@ -1,0 +1,29 @@
+---
+title: "Cross-role and web and mobile tests"
+description: "Verify that a record created by one user reaches another role or app."
+---
+
+A cross-surface test follows one piece of data between people or apps. For example, a customer creates a request in a mobile app and an administrator checks it on the website.
+
+## Prepare the participants
+
+Use a staging environment with disposable records. Save appropriate [logins](/guides/authentication) for each role, and scan the website or app as those users before building the test. A scan performed as an administrator does not establish which paths a customer can reach.
+
+## Build the journey
+
+1. Open your project and choose **Cross-surface test** from the workspace actions.
+2. Name the test, such as `Customer request reaches the admin`.
+3. Add at least two people and give each a role name.
+4. For each person, select **On a website** or **On a phone app** and provide the target URL or app build.
+5. Supply that participant's test login and any workflow notes.
+6. Mark exactly one participant as **Adds the data**. The others **Check it**.
+7. If prompted, scan a participant's target to map its paths.
+8. Generate the journey, then open the resulting suite in **Tests**.
+
+Review the generated steps and assertions before running them. Check that the same identifying record value is created and later read, rather than accepting a generic success message as proof of synchronization.
+
+## Read the result
+
+Inspect each participant's steps in Runs and the **Web and app together** view. A create action can succeed while another user cannot find the record; those are different outcomes.
+
+Keep account permissions, environment, and backend data consistent across surfaces. Feature availability follows your plan. See [Persistence checks](/guides/persistence-checks) for the distinction between accepting an action and verifying its saved data.

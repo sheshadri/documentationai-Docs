@@ -1,0 +1,42 @@
+---
+title: "Email and chat notifications"
+description: "Choose events and connect Slack Discord or Teams to project testing."
+---
+
+Open **Project setup → Notifications**. Configure both the event and destination: an enabled channel does not select events automatically.
+
+## Choose events
+
+Select relevant events, such as failed or completed runs, finished scans, generated tests, or scheduled work. Start with failures to avoid an alert for every routine action.
+
+Enable the channel, save its settings, and use the available test action. Confirm that a real selected event also reaches the destination.
+
+## Email
+
+Enable email and review its destination. Check spam filtering and organizational mail policy if a test message does not arrive.
+
+## Slack
+
+1. Create a Slack app for the workspace.
+2. Enable Incoming Webhooks.
+3. Add a webhook to the intended channel and copy its URL.
+4. Paste the URL into AegisRunner's Slack settings.
+5. Enable the channel, save, and send a test.
+
+Treat the URL as a secret. Follow [Slack's current instructions](https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/) if your workspace requires app approval.
+
+## Discord
+
+Create a webhook in the intended server channel's integration settings. Paste its URL into AegisRunner's Discord settings, enable it, save, and test. The person creating it needs the appropriate server permissions.
+
+## Microsoft Teams
+
+Use your organization's supported incoming-webhook or Workflows setup. AegisRunner sends an Adaptive Card message payload. Configure a compatible workflow and check the Teams test action before relying on it.
+
+Use [Microsoft's current webhook guidance](https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook) when configuring the receiver.
+
+## Diagnose a missing alert
+
+Check event switches, channel enablement, saved URL or address, plan access, and destination permissions. A successful test confirms the connection; it does not select the real events for you.
+
+For a service you control, use [Custom webhooks](/integrations/custom-webhooks).

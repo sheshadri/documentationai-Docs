@@ -1,0 +1,24 @@
+---
+title: "Page audits and their limits"
+description: "Interpret accessibility, performance, SEO, security, and network observations alongside functional results."
+---
+
+A scan can attach audit observations to the pages or screens it reaches. Open a result and inspect the available Behavior, Accessibility, Performance, Security, and SEO categories.
+
+## Prioritize the finding
+
+Check the affected URL or screen, reported rule or observation, and evidence. A failed navigation, a slow resource, a missing heading, and an insecure cookie are different findings.
+
+Use the observation to reproduce the issue in the same environment. Some checks apply to browser pages and do not have the same meaning for native app screens.
+
+## Keep the scope clear
+
+A successful audit check covers the reached state and the condition that was evaluated. It does not establish that every workflow or configuration is safe, fast, or accessible.
+
+Security findings here describe observed application behavior and configuration; they do not replace a dedicated security assessment. Accessibility reports need the manual review described in [Accessibility and WCAG reports](/guides/accessibility).
+
+## Recheck after fixing
+
+Correct the application or testing setup and repeat the affected scan or test. Compare evidence for the same page, account role, environment, and relevant device.
+
+For HTTP failures observed during a workflow, follow [API checks](/guides/api-checks).
