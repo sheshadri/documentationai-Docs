@@ -1,0 +1,35 @@
+---
+title: "Mobile testing"
+description: "Upload an Android or iOS build, choose an execution device, and review screen evidence."
+---
+
+Use Mobile app mode for native app exploration. You need an Android `.apk` or an iPhone `.ipa` prepared for testing; a store listing URL is not an app build.
+
+## Start a mobile scan
+
+1. On the dashboard select **Mobile app**, then **Choose app file**.
+2. Upload the test build, up to 250 MB, and confirm the platform.
+3. Continue to **Device & access**.
+4. Add a test login if the app requires one.
+5. Choose an available execution option and confirm testing permission.
+6. Select **Start scan**.
+
+Within an existing project, you can reuse a previously uploaded app or upload a new build.
+
+## Choose where it runs
+
+Android supports a cloud emulator for iteration or a real device for validation. iOS uses a real device. A busy device can queue the scan until capacity is available.
+
+Mobile access and usage depend on your plan. Check the entitlement shown in the app before starting a run.
+
+## Inspect screens and tests
+
+Open **Activity** for progress. Use **Overview** to inspect reached screens and **Tests** to review generated suites. Confirm that the app installed, opened, and reached the expected authenticated screens.
+
+If upload or startup fails, check that the file is a testable build for the selected platform. Use [Mobile troubleshooting](/help-center/troubleshooting/mobile-scan).
+
+## Test web and mobile together
+
+Choose **Both** when the same product has a website and a native app. Provide the website URL and app build, and review the option to generate a sync test.
+
+Use appropriate saved logins for each surface. Running separate web and mobile scans alone does not prove that data stays in sync; review the generated cross-platform journey and its execution evidence.

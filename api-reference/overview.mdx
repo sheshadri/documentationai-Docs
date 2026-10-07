@@ -1,0 +1,62 @@
+---
+title: "Automation API overview"
+description: "Trigger runs and scans, poll run status, and stream scan progress."
+---
+
+Use the automation API to connect AegisRunner to a pipeline or internal tool. Its base URL is:
+
+```text
+https://app.aegisrunner.com/api/v1
+```
+
+Authenticate with a project [CI token](/api-reference/authentication). The endpoint reference documents CI automation, not the dashboard's full session-authenticated API.
+
+## Trigger a test run
+
+Set `AEGIS_TOKEN` in your environment, then replace the suite ID with a suite from the token's project.
+
+```bash
+curl --fail-with-body https://app.aegisrunner.com/api/v1/ci/trigger \
+  -H "Authorization: Bearer $AEGIS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"suiteIds":["YOUR_SUITE_ID"],"browserProfile":"chromium"}'
+```
+
+A successful run trigger returns `201` with an `id` and `dashboardUrl`. Work is asynchronous. Use that `id` to poll:
+
+```bash
+curl --fail-with-body "https://app.aegisrunner.com/api/v1/ci/runs/$RUN_ID" \
+  -H "Authorization: Bearer $AEGIS_TOKEN"
+```
+
+Poll at a reasonable interval such as ten seconds until `isFinished` is true. Inspect `status`, `failedCases`, and the case results as well as `exitCode`.
+
+A cancelled run can have `exitCode: 0` in the raw API response. Treat `cancelled` as unsuccessful completion. The CLI handles that distinction for you.
+
+## Start a scan
+
+```bash
+curl --fail-with-body https://app.aegisrunner.com/api/v1/ci/trigger \
+  -H "Authorization: Bearer $AEGIS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"crawl":true,"baseUrl":"https://staging.example.com"}'
+```
+
+A scan trigger returns `202` with `crawl_id`, not a run `id`. A cloud URL override must satisfy the project's domain restriction.
+
+If starting the crawl fails, the endpoint can return HTTP `200` with `status: "crawl_failed"`. Check the response body, not only the HTTP status.
+
+## Follow scan progress
+
+```bash
+curl --no-buffer --fail-with-body "https://app.aegisrunner.com/api/v1/ci/crawls/$CRAWL_ID/events" \
+  -H "Authorization: Bearer $AEGIS_TOKEN"
+```
+
+This is a Server-Sent Events stream. It begins with `connected`, carries progress events, and ends with `done` containing `result: "completed"` or `"failed"`. The connection can also emit `timeout`.
+
+A disconnect or timeout does not establish success. Reconnect or inspect the dashboard. Prefer `aegis scan --watch` if you do not need to implement the stream client yourself.
+
+## Avoid duplicate triggers
+
+Trigger requests create work. If a connection drops after sending a request, check the dashboard before retrying: the original request may already have started a scan or run.

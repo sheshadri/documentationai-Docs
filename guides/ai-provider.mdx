@@ -1,0 +1,30 @@
+---
+title: "AI provider setup"
+description: "Choose built-in test generation or configure your own provider for a project."
+---
+
+AegisRunner provides built-in AI for test generation. You can configure a provider for a project through **Project setup → AI provider** when your plan allows it.
+
+## Configure your provider
+
+1. Enable **Bring your own AI key**.
+2. Choose a provider from the available list.
+3. Review the model selected for that provider. Some providers use a fixed model.
+4. Enter an API base URL if your provider requires a custom endpoint.
+5. Enter the provider's API key and select **Save AI provider**.
+
+When updating an enabled provider configuration, supply the intended API key along with the model and endpoint. Keep it in your own secret store so you can replace or rotate it when needed.
+
+The key belongs to your model provider. It is separate from an AegisRunner CI token and from credentials for the application under test.
+
+## Verify generation
+
+Start a small scan or generation task and check its result. A successfully saved configuration is not proof that the provider can generate useful tests for your app.
+
+If generation fails, check the model name, endpoint, provider account access, and available provider credits. Review the error and generated cases before expanding to a larger scan.
+
+## Return to built-in generation
+
+Disable **Bring your own AI key** and save the setting to return the project to AegisRunner's default generation configuration.
+
+Using your own key does not change the project's scan, run, or feature entitlements. Check [Plans and usage](/account/plans-and-usage) for the current limits.

@@ -1,0 +1,69 @@
+---
+title: "CI and deployment pipelines"
+description: "Run a reviewed suite in CI and preserve a JUnit report."
+---
+
+Create and review a suite in AegisRunner before using it as a build check. CI triggers require a Pro or Business plan and a token for the project's tests.
+
+## Prepare the token and suite
+
+1. Open the project, then **Project setup → CI/CD**.
+2. Generate a named CI token and copy it when shown.
+3. Store it in your CI secret store as `AEGIS_TOKEN`.
+4. Choose the suite ID you want the pipeline to run.
+
+Use separate tokens for independent pipelines so that you can revoke one without disrupting the others.
+
+## GitHub Actions example
+
+Save this as `.github/workflows/aegisrunner.yml` in the application repository. Configure `AEGIS_TOKEN` as a repository secret and `AEGIS_SUITE_ID` as a repository variable.
+
+```yaml
+name: AegisRunner regression
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install AegisRunner CLI
+        run: npm install -g @aegisrunner/cli@1.0.28
+      - name: Run suite
+        env:
+          AEGIS_TOKEN: ${{ secrets.AEGIS_TOKEN }}
+          AEGIS_SUITE_ID: ${{ vars.AEGIS_SUITE_ID }}
+        run: |
+          test -n "$AEGIS_SUITE_ID" || { echo "Set AEGIS_SUITE_ID"; exit 2; }
+          aegis run --suite "$AEGIS_SUITE_ID" --timeout 1800 --format junit --output aegis-results/junit.xml
+      - name: Preserve results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aegisrunner-results
+          path: aegis-results/junit.xml
+          if-no-files-found: warn
+```
+
+The target deployment must already be reachable when this job runs. Place the test job after your deployment job if both live in one workflow.
+
+The CLI returns a nonzero exit code for failures, errors, and cancellations. Uploading with `always()` preserves a report when one was produced even if the test step failed.
+
+## Other CI systems
+
+Install the same CLI in GitLab CI, Jenkins, or another Node-capable runner. Inject the token through its secret store, run `aegis run`, and publish the JUnit file.
+
+Do not expose a project token to untrusted pull request code.
+
+## Scans versus regression checks
+
+Use `aegis scan --watch` to discover app changes and generate tests. Use `aegis run` to execute existing tests. Keep these as explicit pipeline steps so the expected completion and failure behavior is clear.
+
+For HTTP integration without the CLI, see [API overview](/api-reference/overview).

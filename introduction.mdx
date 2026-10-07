@@ -1,40 +1,35 @@
 ---
-title: Introduction to SecuredAll
-description: Landing page with an overview of SecuredAll, its key features for human-like automated testing of web and mobile apps, and quick navigation to get started.
+title: "AegisRunner documentation"
+description: "Explore your app, generate tests, investigate failures, and automate regression testing."
 ---
 
-<Image src="https://blob-cdn.documentation.ai/org-2ebb2ef5-dd91-493f-9938-283fbdb14c81/doc-d2a73d2e-4391-4446-a5c8-2d0b41b7c4c1/1774416350161-ay106tw0elt-Image-3.png?q=85&fm=auto&auto=compress%2Cformat" alt="SecuredAll documentation" width="800" height="400" />
+AegisRunner explores websites and mobile apps, generates tests from the pages and screens it reaches, and helps you investigate failures with evidence.
 
-## Welcome to SecuredAll
-
-SecuredAll delivers human-like testing for your web and mobile apps with actionable evidence. You get automated tests without writing a single line of code.
+Start with a scan to discover your app. Review the generated tests, then run them again after changes or from your deployment pipeline.
 
 <Columns cols={2}>
-  <Card title="Automated Exploration" icon="zap" href="/quickstart">
-    Signs in, explores real workflows, and generates tests automatically.
-  </Card>
-  <Card title="Web & Mobile Support" icon="smartphone" href="/guides">
-    Tests websites and native apps on real browsers and devices.
-  </Card>
-  <Card title="Actionable Evidence" icon="file-text" href="/features">
-    Provides page-level screenshots and details on what broke.
-  </Card>
-  <Card title="WCAG Reports" icon="accessibility" href="/reports">
-    Generates printable evidence reports for compliance checks.
-  </Card>
+  <Card title="Run your first scan" icon="rocket" href="/quickstart">Start with a website URL and review the pages AegisRunner reaches.</Card>
+  <Card title="Test behind a login" icon="key" href="/guides/authentication">Add test accounts, session cookies, or a custom sign-in flow.</Card>
+  <Card title="Test a mobile app" icon="smartphone" href="/guides/mobile-testing">Upload an Android or iOS test build and explore its screens.</Card>
+  <Card title="Automate your tests" icon="code" href="/automation/ci-cd">Run suites in CI and collect JUnit results.</Card>
 </Columns>
 
-## Explore Documentation
+## Understand the workflow
 
-<Columns cols={2}>
-  <Card title="Get Started" icon="book-open" href="/quickstart" horizontal>
-    Run your first test in minutes with step-by-step guidance.
-  </Card>
-  <Card title="API Reference" icon="code" href="/api" horizontal>
-    Integrate testing into your CI/CD pipelines seamlessly.
-  </Card>
-</Columns>
+| Term | What it means |
+| --- | --- |
+| Project | The home for an app's scans, logins, tests, runs, and settings. |
+| Scan | Exploration of a website or mobile app, followed by test generation. |
+| Suite | A collection of test cases, often associated with a page or workflow. |
+| Test case | A sequence of actions and checks for expected behavior. |
+| Run | An execution of existing tests, with a result for each case. |
+| Baseline | A saved reference used to compare later results or screenshots. |
 
-<Callout kind="tip">
-  This documentation was generated as a starter kit. Customize the content to match your product.
-</Callout>
+A completed scan does not mean every generated test passed in a later run. Use **Overview** for discovery results and **Runs** for execution results.
+
+## Open AegisRunner
+
+- [Dashboard](https://app.aegisrunner.com/app)
+- [Create an account](https://app.aegisrunner.com/register)
+- [Plans](https://aegisrunner.com/pricing)
+- [Get help](/help-center)

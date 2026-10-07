@@ -1,0 +1,33 @@
+---
+title: "API errors and completion states"
+description: "Handle authentication, plan limits, asynchronous failures, and rate limits."
+---
+
+Check both the HTTP status and response body. Triggering work successfully is different from that work completing successfully.
+
+| Status | Meaning and next step |
+| --- | --- |
+| 400 | Review the JSON body, project-owned IDs, and target URL restrictions. |
+| 401 | Check the CI token and Bearer header. |
+| 402 | Review the project's plan or usage entitlement. |
+| 404 | Check the run or scan ID and that it belongs to the token's project. |
+| 429 | Slow down and retry after the indicated delay. |
+| 5xx | Inspect the response, check the dashboard, and retry cautiously. |
+
+Error bodies can differ between endpoints. Preserve the status and safe error text in logs without logging authorization headers or target credentials.
+
+## Trigger rate limit
+
+The CI trigger has a per-token limit of 30 requests per minute when its rate limiter is available. A rate-limit response includes `retryAfter: 60`. Apply backoff rather than retrying in a tight loop.
+
+## Run completion
+
+Poll the run status until `isFinished` is true. Terminal states include `completed`, `failed`, `cancelled`, and `needs_review`.
+
+Treat `failed` or a nonzero `failedCases` count as failure. Handle cancellation separately. `needs_review` is terminal and non-blocking when no failing cases are present, but still requires human review.
+
+## Scan completion
+
+A `202` scan response acknowledges dispatch. The event stream's `done` event describes completion of discovery and generation.
+
+An HTTP `200` response with `status: "crawl_failed"` means the scan could not start. A stream timeout or disconnect is not a pass result.

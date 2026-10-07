@@ -1,0 +1,19 @@
+{
+  "name": "aegisrunner-documentation",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node scripts/check-docs.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@apidevtools/swagger-parser": "13.1.0",
+    "@mdx-js/mdx": "3.1.1",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "remark-gfm": "4.0.1",
+    "yaml": "2.9.1"
+  }
+}

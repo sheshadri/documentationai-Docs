@@ -1,0 +1,28 @@
+---
+title: "Login troubleshooting"
+description: "Resolve bad credentials, expired sessions, and incomplete authenticated coverage."
+---
+
+If a scan reaches only a sign-in page, inspect access before interpreting the rest of its coverage.
+
+## Check the exact account and environment
+
+Sign in manually with the same test account at the exact scan URL. Confirm that the account is active and has access to the expected pages.
+
+The AegisRunner account password is not the target application's password.
+
+## Check saved login settings
+
+Open **App access** and inspect the saved login's identity, password, extra fields, and **Used on** setting. Save changes and use **Check website login** for the web surface.
+
+An account saved as Mobile only will not be used for a web scan.
+
+## Refresh interactive sessions
+
+For SSO, magic links, or MFA, sign in manually and import fresh session cookies. Check the cookie domain and path. An expired or environment-specific session will not authenticate another target.
+
+If an interactive challenge remains, prepare a test environment and supported access method that the scanner can use.
+
+## Verify the result
+
+Run a focused scan and inspect the screenshot of a protected page. Seeing a successful login action alone is less useful than confirming that the intended authenticated content was reached.

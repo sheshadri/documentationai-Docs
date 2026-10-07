@@ -1,185 +1,374 @@
-openapi: '3.0.0'
+openapi: 3.0.3
 info:
+  title: AegisRunner Automation API
   version: 1.0.0
-  title: SecuredAll
-  license:
-    name: MIT
+  description: >-
+    Project-scoped CI automation. Trigger runs and scans, retrieve run results,
+    and stream scan progress. This reference covers CI-token endpoints, not the
+    full session-authenticated dashboard API.
+  contact:
+    name: AegisRunner support
+    email: support@aegisrunner.com
 servers:
-  - url: https://api.securedall.com/v1
+  - url: https://app.aegisrunner.com/api/v1
+    description: AegisRunner cloud
+security:
+  - ciToken: []
+tags:
+  - name: CI automation
+    description: Trigger and follow project testing work.
 paths:
-  /documents:
-    get:
-      summary: List documents
-      operationId: listDocuments
-      parameters:
-        - name: limit
-          in: query
-          description: How many items to return at one time (max 100)
-          required: false
-          schema:
-            type: integer
-            format: int32
-      responses:
-        200:
-          description: An paged array of documents
-          headers:
-            x-next:
-              description: A link to the next page of responses
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Documents'
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+  /ci/trigger:
     post:
-      summary: Create document
-      operationId: createDocument
+      tags: [CI automation]
+      summary: Trigger a run or scan
+      operationId: triggerWork
+      description: >-
+        Requires a Pro or Business project. Choose one workflow per request.
+        Returns immediately; use run polling or scan events for completion.
+        No idempotency key is supported. Check the dashboard before retrying an
+        uncertain trigger. Only common automation fields are listed here.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TriggerRequest'
+            examples:
+              run:
+                summary: Run selected suites
+                value:
+                  suiteIds: [00000000-0000-4000-8000-000000000001]
+                  browserProfile: chromium
+              scan:
+                summary: Scan the configured website
+                value:
+                  crawl: true
+              mobile:
+                summary: Re-scan the last uploaded mobile app
+                value:
+                  mobileScan:
+                    platform: android
+                    engine: emulator
       responses:
-        201:
-          description: Null response
-        default:
-          description: unexpected error
+        '200':
+          description: Crawl could not start. Check the body rather than treating HTTP 200 as success.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-  /documents/{documentId}:
+                $ref: '#/components/schemas/CrawlFailed'
+        '201':
+          description: Test run created. Poll the returned id for completion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunCreated'
+        '202':
+          description: Scan accepted. Website scans return crawl_id; mobile scans do not return a run ID.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/CrawlStarted'
+                  - $ref: '#/components/schemas/MobileAccepted'
+        '400':
+          description: Invalid body, target domain, or project-owned IDs.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '402':
+          description: Plan or usage entitlement prevents the operation.
+        '429':
+          description: Per-token trigger limit reached. The response includes retryAfter of 60 seconds.
+        '500':
+          description: Unexpected error. Check existing work before retrying a trigger.
+  /ci/runs/{runId}:
     get:
-      summary: Get document
-      operationId: showDocumentById
+      tags: [CI automation]
+      summary: Get run status
+      operationId: getRunStatus
+      description: >-
+        Poll a run from the token project until isFinished is true. Inspect status
+        and failedCases as well as exitCode. needs_review is terminal and
+        non-blocking when no cases failed. Handle cancelled explicitly.
       parameters:
-        - name: documentId
+        - name: runId
           in: path
           required: true
-          description: The id of the document to retrieve
           schema:
             type: string
+            format: uuid
       responses:
-        200:
-          description: Expected response to a valid request
+        '200':
+          description: Current run state and available case results.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Documents'
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /folders:
+                $ref: '#/components/schemas/RunStatus'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Run does not exist or belongs to a different project.
+  /ci/crawls/{crawlId}/events:
     get:
-      summary: List folders
-      operationId: listFolders
+      tags: [CI automation]
+      summary: Stream scan progress
+      operationId: streamScanProgress
+      description: >-
+        Use crawl_id from a website scan response. The stream starts with connected,
+        carries discovery and generation events, and ends with done containing
+        result=completed or failed. It can emit timeout after 30 minutes. Reconnecting
+        after completion returns connected followed by done. A disconnect or timeout
+        is not evidence of success. Progress payloads vary by event.
       parameters:
-        - name: limit
-          in: query
-          description: How many items to return at one time (max 100)
-          required: false
-          schema:
-            type: integer
-            format: int32
-      responses:
-        200:
-          description: An paged array of folders
-          headers:
-            x-next:
-              description: A link to the next page of responses
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Folders'
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-    post:
-      summary: Create folder
-      operationId: createFolder
-      responses:
-        201:
-          description: Null response
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /folders/{folderId}:
-    get:
-      summary: Get folder
-      operationId: showFolderById
-      parameters:
-        - name: folderId
+        - name: crawlId
           in: path
           required: true
-          description: The id of the folder to retrieve
           schema:
             type: string
+            format: uuid
       responses:
-        200:
-          description: Expected response to a valid request
+        '200':
+          description: Server-Sent Events with JSON data. Comment lines are keepalives.
           content:
-            application/json:
+            text/event-stream:
               schema:
-                $ref: '#/components/schemas/Folders'
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+                type: string
+              example: |
+                event: connected
+                data: {"crawl_id":"00000000-0000-4000-8000-000000000002","status":"running"}
+
+                event: done
+                data: {"crawl_id":"00000000-0000-4000-8000-000000000002","result":"completed"}
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Scan does not exist or belongs to a different project.
+        '503':
+          description: Live scan updates are unavailable.
 components:
+  securitySchemes:
+    ciToken:
+      type: http
+      scheme: bearer
+      description: Create a project token under Project setup → CI/CD.
+  responses:
+    Unauthorized:
+      description: Missing, invalid, expired, or revoked CI token.
   schemas:
-    Document:
-      required:
-        - id
-        - name
+    TriggerRequest:
+      type: object
+      description: >-
+        Choose existing test execution, crawl=true for a website scan, or mobileScan.
+        If no cases or suites are selected, the API prefers latest-scan suites and
+        falls back to project suites. The wait field is not a server-side wait mechanism.
+      properties:
+        suiteIds:
+          type: array
+          description: Suite IDs belonging to the token project.
+          items:
+            type: string
+            format: uuid
+        caseIds:
+          type: array
+          description: Case IDs belonging to the token project. Takes precedence over suiteIds.
+          items:
+            type: string
+            format: uuid
+        browserProfile:
+          type: string
+          description: Browser profile for the run; defaults to chromium.
+          example: chromium
+        environmentId:
+          type: string
+          format: uuid
+          description: Environment belonging to the token project.
+        testDataSetId:
+          type: string
+          format: uuid
+          description: Project data set. If omitted, the current project default is used.
+        baseUrl:
+          type: string
+          format: uri
+          description: Target override. Full cloud scans require the configured project's base domain.
+        crawl:
+          type: boolean
+          description: Start discovery and test generation instead of an existing-suite run.
+        maxPages:
+          type: integer
+          minimum: 1
+          description: Requested full-scan page limit. Plan limits still apply.
+        maxDepth:
+          type: integer
+          minimum: 1
+          description: Requested full-scan navigation depth.
+        device:
+          type: string
+          enum: [desktop, mobile]
+          description: Device mode for a full website scan.
+        authRole:
+          type: string
+          description: Saved login role name for a full scan.
+          example: Admin
+        credentials:
+          type: object
+          description: Full-scan target credentials. Saved to the project for future scans and runs.
+          required: [username, password]
+          properties:
+            username:
+              type: string
+            password:
+              type: string
+              format: password
+              writeOnly: true
+        mobileScan:
+          $ref: '#/components/schemas/MobileScanRequest'
+    MobileScanRequest:
+      type: object
+      description: Dispatch native app discovery. Omit app to reuse the latest scanned app.
+      properties:
+        app:
+          type: string
+          description: Supported app reference such as a previously uploaded tb:// reference.
+        appName:
+          type: string
+        platform:
+          type: string
+          enum: [android, ios]
+        role:
+          type: string
+          description: Saved app login role.
+        deviceName:
+          type: string
+          description: Requested real-device name.
+        platformVersion:
+          type: string
+          description: Requested OS version.
+        engine:
+          type: string
+          enum: [emulator, '']
+          description: Use emulator for Android emulator execution; omit for real-device execution.
+    RunCreated:
+      type: object
+      required: [id, project_id, status, dashboardUrl]
       properties:
         id:
-          type: integer
-          format: int64
-        name:
           type: string
-        tag:
+          format: uuid
+        project_id:
           type: string
-    Documents:
-      type: array
-      items:
-        $ref: '#/components/schemas/Document'
-    Folder:
-      required:
-        - id
-        - name
+          format: uuid
+        projectName:
+          type: string
+        status:
+          type: string
+          example: queued
+        runType:
+          type: string
+        targetIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        dashboardUrl:
+          type: string
+          format: uri
+    CrawlStarted:
+      type: object
+      required: [status, crawl_id, project_id, dashboardUrl]
       properties:
-        id:
-          type: integer
-          format: int64
-        name:
+        status:
           type: string
-        tag:
+          enum: [crawl_started]
+        crawl_id:
           type: string
-    Folders:
-      type: array
-      items:
-        $ref: '#/components/schemas/Folder'
-    Error:
-      required:
-        - code
-        - message
-      properties:
-        code:
-          type: integer
-          format: int32
+          format: uuid
+        project_id:
+          type: string
+          format: uuid
         message:
+          type: string
+        dashboardUrl:
+          type: string
+          format: uri
+    MobileAccepted:
+      type: object
+      required: [status, message]
+      properties:
+        status:
+          type: string
+          enum: [scanning]
+        message:
+          type: string
+    CrawlFailed:
+      type: object
+      required: [status, error]
+      properties:
+        status:
+          type: string
+          enum: [crawl_failed]
+        error:
+          type: string
+        message:
+          type: string
+    RunStatus:
+      type: object
+      required: [id, status, isFinished, exitCode]
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          description: Terminal values include completed, failed, cancelled, and needs_review.
+        isFinished:
+          type: boolean
+        exitCode:
+          type: integer
+          enum: [0, 1]
+          description: Returns 1 for failed and 0 otherwise. Also inspect failedCases and handle cancelled.
+        totalCases:
+          type: integer
+          nullable: true
+        passedCases:
+          type: integer
+          nullable: true
+        failedCases:
+          type: integer
+          nullable: true
+        skippedCases:
+          type: integer
+          nullable: true
+        duration_ms:
+          type: integer
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        completed_at:
+          type: string
+          format: date-time
+          nullable: true
+        cases:
+          type: array
+          nullable: true
+          description: Per-case details when the run is terminal and results are available.
+          items:
+            $ref: '#/components/schemas/CaseResult'
+    CaseResult:
+      type: object
+      properties:
+        name:
+          type: string
+        suiteName:
+          type: string
+        status:
+          type: string
+        durationMs:
+          type: integer
+        errorMessage:
+          type: string
+        failureType:
           type: string

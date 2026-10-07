@@ -1,0 +1,53 @@
+---
+title: "App access and login"
+description: "Save and check test accounts, session cookies, API tokens, and custom sign-in flows."
+---
+
+Open your project and select **App access**. Provide access to the application under test using a dedicated test account.
+
+## Password login
+
+1. Select **Password login**, then **Add login**.
+2. Give the login a useful name, such as `Admin` or `Customer`, when you test multiple roles.
+3. Set **Used on** to Web only, Mobile only, or Web & Mobile.
+4. Enter the app's email, username, or phone number and password.
+5. Add extra fields if the form requires an organization or another identifier.
+6. Save, then use **Check website login** for a web login.
+
+Saving stores the account details; it does not verify that the password works. Review the login check and scan evidence to confirm access.
+
+Keep separate web and mobile logins when their forms require different identities.
+
+## Session cookies for SSO or MFA
+
+Use **Session cookies** when you need an already authenticated session, such as after SSO, a magic link, or multi-factor authentication.
+
+1. Sign in to your test app in a browser.
+2. Export the session cookies as a JSON array.
+3. Paste the array into Session cookies.
+4. Select **Load pasted cookies**, review the entries, and select **Save cookies**.
+
+Example structure:
+
+```json
+[
+  {
+    "name": "session",
+    "value": "REPLACE_WITH_TEST_SESSION_VALUE",
+    "domain": "staging.example.com",
+    "path": "/"
+  }
+]
+```
+
+The cookie domain must match your target. Refresh the saved session when it expires. Treat session values like passwords.
+
+## Other access methods
+
+The advanced access options include **API tokens**, **Request headers**, and a **Custom script** for sign-in flows that require Playwright steps. Save the relevant configuration and validate it on your app before starting a broad scan.
+
+These app access tokens authenticate against your target application. They are different from [AegisRunner CI tokens](/api-reference/authentication).
+
+## If the login fails
+
+Confirm the account works manually on the exact target environment. Check for an expired session, a required extra field, a changed form, or an interactive challenge. Follow [Login troubleshooting](/help-center/troubleshooting/login-failed).

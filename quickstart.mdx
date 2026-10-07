@@ -1,144 +1,46 @@
 ---
-title: Quickstart
-description: Set up your SecuredAll account and run your first test scan in under 5 minutes, covering signup, workspace creation, and initial results review.
+title: "Run your first website scan"
+description: "Create a project from a website URL, configure access, and inspect your first results."
 ---
 
-## Prerequisites
+Use a staging website you can test and a dedicated test account if sign-in is required. For native apps, follow [Mobile testing](/guides/mobile-testing).
 
-<Callout kind="info">
+## Sign in
 
-Before starting, ensure you have:
+[Create an AegisRunner account](https://app.aegisrunner.com/register), then open the [dashboard](https://app.aegisrunner.com/app).
 
-- A modern web browser like Chrome or Firefox
-- Access to a public website URL or mobile app file (APK/IPA)
-- No credit card required for the free tier
+The credentials you use to sign in to AegisRunner are separate from the credentials for the app you want to test.
 
-</Callout>
+## Choose your website
 
-## Create your account
+1. Select **Website** on the dashboard.
+2. Enter your website URL, such as `https://staging.example.com`.
+3. Select **Start testing**.
+4. Check the **Website URL** in the scan dialog and continue to the scan options.
 
-Follow these steps to sign up and access the dashboard.
+Starting a scan from the dashboard creates or resolves a project for the target. For an existing project, start the scan from that project's workspace.
 
-<Steps>
-  <Step title="Register" icon="user-plus">
-    Visit `https://app.securedall.com/register` and enter your email and password.
+## Configure access and scan behavior
 
-    Create a strong password and verify your email if prompted.
-  </Step>
-  <Step title="Log in" icon="log-in">
-    Go to `https://app.securedall.com/login` and sign in with your credentials.
+1. If your app needs sign-in, add its test account in **Does your app need a login?** Saved logins can also be managed in [App access](/guides/authentication).
+2. Confirm that you own the app or are authorized to test it.
+3. Review the option to allow changes. Enable it only when creating, editing, and deleting test data is appropriate for this environment.
+4. Under scan detail, use **Smart scan** for representative checks across repeated page types, or **Full detail** for deeper checks on each reached page.
+5. Select **Start scan**.
 
-    You'll land on the main dashboard.
-  </Step>
-</Steps>
+Both scan modes stay within your plan's scan limits. Full detail can take longer; completion time depends on the app, access, and the work discovered.
 
-## Set up your first workspace
+## Inspect what was reached
 
-Workspaces organize your scans and reports.
+Open **Activity** for progress. In the project, use **Overview** to inspect pages and screenshots as they arrive. Test generation can continue after page discovery finishes.
 
-<Steps>
-  <Step title="Create workspace" icon="folder-plus">
-    Click the `New Workspace` button on the dashboard.
+Check that protected pages appear if you supplied a login. If you only see the sign-in page, correct the login before treating the scan as coverage of your app.
 
-    Enter a name like `My First Project` and select `Free` plan.
-  </Step>
-  <Step title="Configure basics" icon="settings">
-    Add your team members if needed, or skip to scans.
+## Run the generated tests
 
-    Note the workspace ID for API use: `{workspace_id}`.
-  </Step>
-</Steps>
+1. Open **Tests** and inspect a generated suite.
+2. Check that its actions and expected outcomes match your app.
+3. Start a run for the suite.
+4. Open **Runs** to inspect case results and available step evidence.
 
-## Run your first scan
-
-Choose between website or mobile app scanning.
-
-<Tabs>
-  <Tab title="Website" icon="globe">
-    <Steps>
-      <Step title="Enter URL" icon="link">
-        In your workspace, click `New Scan` > `Website`.
-
-        Paste a URL like `https://example.com`.
-      </Step>
-      <Step title="Start scan" icon="play">
-        Select options like login flows if applicable.
-
-        Click `Run Scan`. It explores human-like paths automatically.
-      </Step>
-    </Steps>
-
-    <Request tabs="cURL" show-lines="true">
-    ```bash
-    curl -X POST https://api.example.com/v1/scans \
-      -H "Authorization: Bearer YOUR_API_KEY" \
-      -H "Content-Type: application/json" \
-      -d '{
-        "workspace_id": "ws_123456",
-        "url": "https://example.com",
-        "type": "website"
-      }'
-    ```
-    </Request>
-  </Tab>
-  <Tab title="Mobile App" icon="smartphone">
-    <Steps>
-      <Step title="Upload app" icon="upload">
-        Select `New Scan` > `Mobile App`.
-
-        Upload your APK or IPA file.
-      </Step>
-      <Step title="Run test" icon="play">
-        Configure device (Android/iOS) and start.
-
-        Review auto-generated tests and evidence.
-      </Step>
-    </Steps>
-
-    <Callout kind="tip">
-      For private apps, provide login credentials during setup.
-    </Callout>
-  </Tab>
-</Tabs>
-
-## Review your results
-
-Scans complete in minutes, providing:
-
-- Page-level evidence screenshots
-- WCAG compliance reports
-- Playwright export for CI/CD
-- Actionable failure details
-
-Download the report or export tests directly from the results page.
-
-```mermaid
-sequenceDiagram
-  participant U as You
-  participant S as SecuredAll
-  U->>S: Submit URL/App
-  S->>S: Explore workflows
-  S->>S: Generate tests
-  S->>U: Evidence report
-```
-
-## Next steps
-
-<Columns cols={2}>
-  <Card title="Authentication" icon="shield" href="/authentication">
-    Secure scans with login-aware testing.
-  </Card>
-  <Card title="Advanced Guides" icon="book-open" href="/guides">
-    Explore custom workflows and integrations.
-  </Card>
-  <Card title="API Reference" icon="code" href="/api-reference">
-    Automate scans programmatically.
-  </Card>
-  <Card title="Changelog" icon="git-branch" href="/changelog">
-    Stay updated with latest features.
-  </Card>
-</Columns>
-
-<Callout kind="success">
-  Congratulations! You've run your first SecuredAll scan. Customize scans for deeper coverage.
-</Callout>
+See [Test suites and runs](/guides/test-suites) and [Reading results](/guides/results) for the next steps.

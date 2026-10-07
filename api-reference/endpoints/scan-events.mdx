@@ -1,0 +1,26 @@
+---
+title: "Stream scan progress"
+description: "Follow website discovery and test generation through Server-Sent Events."
+method: GET
+path: "/ci/crawls/{crawlId}/events"
+---
+
+Follow website discovery and test generation through Server-Sent Events. Use the crawl_id returned by a website scan trigger. Completion is reported by the done event.
+
+See [API authentication](/api-reference/authentication) for tokens and [API errors](/api-reference/errors) for completion and failure handling.
+
+## Event stream example
+
+The successful response is `text/event-stream`, not a JSON object. A completed website scan can produce:
+
+```text
+event: connected
+data: {"crawl_id":"00000000-0000-4000-8000-000000000002","status":"running"}
+
+event: done
+data: {"crawl_id":"00000000-0000-4000-8000-000000000002","result":"completed"}
+```
+
+Progress events can appear between these messages. Inspect the `done` event's `result`: `failed` indicates an unsuccessful scan. A `timeout` or disconnection does not establish successful completion.
+
+Use the [streaming cURL example](/api-reference/overview#follow-scan-progress) or `aegis scan --watch` when you need live progress outside the dashboard.

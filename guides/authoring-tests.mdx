@@ -1,0 +1,44 @@
+---
+title: "Create and edit tests"
+description: "Add test cases, edit actions and expectations, and approve tests you have reviewed."
+---
+
+Use the Tests view to adjust generated tests or add a focused check for a workflow you care about. Keep each case specific enough that a failure tells you what behavior changed.
+
+## Create a suite
+
+1. Open **Tests** and choose **New suite** from the actions menu.
+2. Enter a name and an optional description.
+3. Add a page URL if the suite should start from a particular page.
+4. Select **Create suite**.
+
+Choose an existing suite instead if the new case belongs to a workflow you already test.
+
+## Add a test case
+
+1. Select the suite and choose **Add Test Case**.
+2. Give the case a name describing the behavior you want to check.
+3. Select an action, its target, and any required value.
+4. Use **Add step** to build the action sequence and expected outcome.
+5. Select **Save test case**.
+6. Run the case and inspect its evidence.
+
+For supported web cases, **Describe in plain English** can propose steps. Supply a page URL when the suite has none, select **Generate**, and review the resulting steps before saving. Keep account secrets in [App access](/guides/authentication).
+
+## Edit a step
+
+Expand the case and select **Edit step**. Review the action, target, and value before saving. Mobile steps expose the appropriate on-screen target and expected outcome fields.
+
+After editing, rerun the affected case. Changing a target or expectation should reflect the app's intended behavior, rather than merely removing a failure.
+
+## Mark reviewed cases
+
+Cases have pending, approved, and rejected review states. Approve a case once you trust its actions and expectations. The suite's **Approve pending** action marks the pending cases together, so review them before using it.
+
+Approval helps failure triage distinguish a regression in a trusted check from a new failure in an unreviewed check. Case review status is separate from a run's **Needs review** outcome.
+
+## Organize recurring checks
+
+Use suite tags such as `smoke` or `critical` to target [scheduled groups](/automation/schedules). A schedule that selects a tag matches suite tags; a tag attached only to a case does not select its suite.
+
+Use **Disable** to retain a case while excluding it from normal execution. Re-enable it once its setup or expectations have been corrected.
