@@ -88,6 +88,10 @@
                 "path": "guides/test-suites"
               },
               {
+                "title": "Create and edit tests",
+                "path": "guides/authoring-tests"
+              },
+              {
                 "title": "Mobile testing",
                 "path": "guides/mobile-testing"
               }
@@ -132,6 +136,10 @@
               {
                 "title": "Integrations and notifications",
                 "path": "integrations"
+              },
+              {
+                "title": "AI provider setup",
+                "path": "guides/ai-provider"
               }
             ]
           },
