@@ -1,0 +1,35 @@
+---
+title: "API authentication"
+description: "Create a project CI token and authenticate automation requests."
+---
+
+The automation endpoints use a **CI trigger token** scoped to one project. Create it from **Project setup → CI/CD** on an eligible Pro or Business plan.
+
+## Create and store the token
+
+1. Enter a name that identifies the consuming pipeline.
+2. Select **Generate**.
+3. Copy the token immediately; it is shown once.
+4. Save it in a secret store such as a CI secret named `AEGIS_TOKEN`.
+
+Send it in the authorization header:
+
+```http
+Authorization: Bearer aegis_REPLACE_WITH_YOUR_TOKEN
+```
+
+Do not commit tokens to source control or include them in screenshots or support reports.
+
+## Use the right credential
+
+A CI token can trigger work and read CI results for its own project. It does not provide general access to every endpoint used by the dashboard.
+
+App access passwords, imported session cookies, and API tokens for your application serve a different purpose. Configure those through [App access](/guides/authentication).
+
+## Handle authentication failures
+
+A `401` can indicate a missing Bearer header, an invalid token, expiration, or revocation. A `404` when reading a run or scan can also mean that the ID belongs to another project.
+
+A valid token does not bypass subscription checks. After a downgrade, triggering new CI work may return `402`.
+
+See [API errors](/api-reference/errors).

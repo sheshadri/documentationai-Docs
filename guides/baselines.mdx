@@ -1,0 +1,24 @@
+---
+title: "Baselines and visual changes"
+description: "Compare later results with a known reference and review intended changes."
+---
+
+A baseline is a reference for comparison. Choose a known-good state of your app so that differences in later checks are meaningful.
+
+## Choose a reference
+
+Open **Baselines** from the project's additional views or Project setup. Select a suitable scan or available baseline for the comparison workflow.
+
+Confirm the target environment, account role, and app state before adopting a reference. Avoid selecting a scan that stopped at a login screen or an error page.
+
+## Review a visual difference
+
+Where visual comparison evidence is available, inspect the baseline, current image, and highlighted difference together.
+
+A change can be an intended redesign, a rendering problem, or unstable content such as a timestamp. Compare the underlying behavior as well as the image.
+
+Accept the current screenshot as the new baseline only when the change is intended. Rejecting a change leaves the existing baseline in place.
+
+## Repeat the check
+
+Use **Project setup → Schedules** to configure a **Visual baseline check** when available on your plan. Keep the same viewport and target assumptions across comparisons.

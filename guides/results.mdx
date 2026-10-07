@@ -1,0 +1,35 @@
+---
+title: "Read and share results"
+description: "Investigate scan findings and run failures using the available evidence."
+---
+
+Use **Overview** to understand what a scan reached and **Runs** to understand what happened when tests executed.
+
+## Inspect a scan
+
+Select the intended scan and open a page or screen. Review the screenshot and available categories: behavior, accessibility, performance, security, and SEO.
+
+Check the URL or screen, account access, and discovered forms before acting on a finding. If a protected route shows a login page, resolve access first.
+
+## Investigate a failed run
+
+1. Open **Runs** and select the execution.
+2. Filter to failed or needs-review cases.
+3. Open the affected case and review the failed step and expected behavior.
+4. Inspect screenshots, recordings, and errors where available.
+5. Reproduce in the same environment and role.
+6. Fix the cause and rerun the affected cases.
+
+Evidence varies by execution and surface. An absent recording is not proof that the case did not run.
+
+## Export or share
+
+From a run, open **Export** to choose CSV, HTML, PDF, or JUnit XML. Use JUnit for CI reporting and a readable report for investigation.
+
+**Share** copies a public run link. Anyone with that link can view the shared run, so check the evidence for sensitive test data before distributing it.
+
+For accessibility-specific exports, use [WCAG reports](/guides/accessibility).
+
+## Compare like with like
+
+Compare the same target environment, role, browser, and data assumptions. A changed account permission or expired session can look like an app regression.

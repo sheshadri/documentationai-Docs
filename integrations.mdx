@@ -1,184 +1,32 @@
 ---
-title: Integrations
-description: Connect SecuredAll outputs to your development workflow with Playwright tests exports, CI/CD pipelines, and other third-party tools or webhooks.
+title: "Integrations and notifications"
+description: "Connect issue trackers, deployment events, and run notifications."
 ---
 
-## Overview
+AegisRunner groups integrations by what they do. Open **Project setup** in the project you want to connect.
 
-SecuredAll integrates seamlessly with your existing tools. Export tests as Playwright scripts for local execution, set up CI/CD pipelines to run scans automatically, configure webhooks for real-time notifications, and connect to third-party services like Slack or Jira.
+## Issue trackers
 
-<Columns cols={2}>
-  <Card title="Playwright Export" icon="code" href="#playwright-export">
-    Generate executable Playwright tests from your scans.
-  </Card>
-  <Card title="CI/CD Pipelines" icon="git-branch" href="#ci-cd">
-    Automate testing in GitHub Actions, GitLab CI, and more.
-  </Card>
-  <Card title="Webhooks" icon="zap" href="#webhooks">
-    Receive instant notifications on scan completion.
-  </Card>
-  <Card title="Third-party Tools" icon="plug" href="#third-party">
-    Integrate with Slack, Jira, and custom endpoints.
-  </Card>
-</Columns>
+Under **Integrations**, configure GitHub or Jira with access to the intended repository or project. The form explains the required credentials and destination fields.
 
-<Callout kind="tip">
-  Start with Playwright exports for quick local testing, then add CI/CD for automation.
-</Callout>
+Choose whether failed tests should create issues and whether issues should close after a passing run. Review the destination and automation switches before saving.
 
-## Export Playwright Tests
+Start with a known test run and confirm the resulting issue lands in the correct place.
 
-Export your SecuredAll scans as ready-to-run Playwright tests. These scripts replicate human-like interactions captured during scans.
+## Deployment automation
 
-<Steps>
-  <Step title="Run a Scan" icon="play">
-    Complete a scan in your SecuredAll workspace.
-  </Step>
-  <Step title="Export Tests" icon="download">
-    Navigate to scan results and select `Export > Playwright`.
-  </Step>
-  <Step title="Run Locally" icon="terminal">
-    Install Playwright and execute the generated script.
-  </Step>
-</Steps>
+Under **CI/CD**, configure a supported deployment integration such as Vercel or Netlify, or generate a CI token for your own pipeline.
 
-<CodeGroup tabs="Installation,Usage">
-  ```bash
-  npm init playwright@latest
-  npm install @playwright/test
-  ```
-  ```javascript
-  // tests/securedall-scan.spec.js
-  const { test, expect } = require('@playwright/test');
+Use the webhook URL and verification settings displayed by the integration. A deployment must be reachable by the scanner or executor before tests can succeed.
 
-  test('SecuredAll exported workflow', async ({ page }) => {
-    await page.goto('https://your-app.com/login');
-    await page.fill('#email', 'user@example.com');
-    await page.fill('#password', 'pass123');
-    await page.click('button[type=submit]');
-    await expect(page).toHaveURL(/dashboard/);
-  });
-  ```
-</CodeGroup>
+For a pipeline you control, follow the [CI guide](/automation/ci-cd).
 
-## CI/CD Pipeline Setup
+## Notifications
 
-Integrate SecuredAll into your CI/CD workflows. Use the CLI or API to trigger scans on pull requests or deployments.
+Open **Project setup → Notifications** and select the available channels and events appropriate to the team. Test the configuration before relying on it for release monitoring.
 
-<Tabs>
-  <Tab title="GitHub Actions" icon="github">
-    <CodeGroup tabs="Workflow,YAML">
-      ```yaml
-      # .github/workflows/scan.yml
-      name: SecuredAll Scan
-      on: [pull_request]
-      jobs:
-        scan:
-          runs-on: ubuntu-latest
-          steps:
-            - uses: actions/checkout@v4
-            - name: Run SecuredAll Scan
-              run: |
-                npx @securedall/cli@latest scan \
-                  --api-key ${{ secrets.SECUREDALL_API_KEY }} \
-                  --url https://staging.your-app.com
-      ```
-    </CodeGroup>
-  </Tab>
-  <Tab title="GitLab CI" icon="git-branch">
-    ```yaml
-    # .gitlab-ci.yml
-    securedall-scan:
-      stage: test
-      script:
-        - curl -sSL https://cli.securedall.com/install.sh | bash
-        - securedall scan --api-key $SECUREDALL_API_KEY --url $CI_ENVIRONMENT_URL
-      rules:
-        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    ```
-  </Tab>
-</Tabs>
+Integration and notification availability depends on your plan. Keep connected credentials current and remove a connection when it is no longer used.
 
-## Webhooks for Notifications
+## Avoid duplicate automation
 
-Set up webhooks to receive scan results in real-time. Configure them in your workspace settings.
-
-<Request tabs="Setup" show-lines="false">
-  ```bash
-  curl -X POST https://api.securedall.com/v1/webhooks \
-    -H "Authorization: Bearer YOUR_API_KEY" \
-    -H "Content-Type: application/json" \
-    -d '{
-      "url": "https://your-webhook-url.com/securedall",
-      "events": ["scan.completed", "scan.failed"]
-    }'
-  ```
-</Request>
-
-<Response tabs="Payload">
-  ```json
-  {
-    "event": "scan.completed",
-    "scanId": "scan_abc123",
-    "status": "passed",
-    "issues": 0,
-    "url": "https://app.securedall.com/scans/scan_abc123"
-  }
-  ```
-</Response>
-
-<ParamField header="Authorization" param-type="string" required="true">
-  Bearer token for authentication.
-</ParamField>
-
-<ParamField body="url" param-type="string" required="true">
-  Your webhook endpoint URL.
-</ParamField>
-
-<ParamField body="events" param-type="array" required="true">
-  Events to subscribe to, like `["scan.completed"]`.
-</ParamField>
-
-## Third-party Tool Connections
-
-Connect SecuredAll to popular tools for enhanced workflows.
-
-<Expandable title="Slack Notifications" default-open="true">
-  Use webhooks to post scan summaries to Slack channels.
-
-  ```javascript
-  // Example Slack webhook handler
-  app.post('/securedall', (req, res) => {
-    if (req.body.status === 'failed') {
-      slack.chat.postMessage({
-        channel: '#alerts',
-        text: `SecuredAll scan failed: ${req.body.scanId}`
-      });
-    }
-    res.sendStatus(200);
-  });
-  ```
-</Expandable>
-
-<Expandable title="Jira Integration">
-  Create Jira issues automatically for failed scans using webhooks and Jira API.
-</Expandable>
-
-<Board title="Integration Roadmap">
-  <BoardColumn title="Planned" color="0" icon="circle">
-    <BoardCard title="CircleCI Support" description="Native CircleCI orb" dueDate="2024-12-15" />
-    <BoardCard title="TeamCity" icon="server" />
-  </BoardColumn>
-  <BoardColumn title="In Progress" color="1" icon="loader-2">
-    <BoardCard title="Zapier" description="No-code integrations" author="Engineering" />
-  </BoardColumn>
-  <BoardColumn title="Live" color="2" icon="check-circle">
-    <BoardCard title="Playwright" createdAt="2024-11-01" />
-    <BoardCard title="GitHub Actions" icon="github" />
-    <BoardCard title="Webhooks" />
-  </BoardColumn>
-</Board>
-
-<Callout kind="info">
-  Store API keys securely as environment variables in your CI/CD platform.
-</Callout>
+If both a deployment webhook and a CI job trigger the same suites, a single deployment may start multiple runs. Pick the intended trigger and inspect Runs after enabling it.

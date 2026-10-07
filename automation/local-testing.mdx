@@ -1,0 +1,46 @@
+---
+title: "Local and private apps"
+description: "Reach a local target with a tunnel or execute scans on your own machine."
+---
+
+A cloud scanner cannot directly reach your laptop's `localhost`. Choose a tunnel for cloud execution or a local scan executor for a browser running inside your network.
+
+## Tunnel a local app
+
+Start your app, then run:
+
+```bash
+aegis scan --tunnel --port 3000
+```
+
+This keeps the tunnel open while the scan runs and follows progress. Keep the process alive until it finishes.
+
+For a development session:
+
+```bash
+aegis dev --port 3000 -- npm run dev
+```
+
+Use the command's displayed controls to start a scan, open results, or quit. The forwarded URL is temporary and stops working when the tunnel closes.
+
+## Run the scan browser locally
+
+For a private target that should be reached from inside your network, use the CLI's local scan workflow:
+
+```bash
+# On the machine that can reach the target:
+aegis scan-runner
+
+# From a separate terminal with the same project's CI token:
+aegis scan --local --url http://localhost:3000 --watch
+```
+
+Follow `aegis scan-runner --help` for the executor's browser setup and prerequisites. `localhost` here refers to the executor machine.
+
+For authenticated local scans, set `AEGIS_USERNAME` and `AEGIS_PASSWORD` on the executor. Do not pass `--username` or `--password-stdin` on the triggering local-scan command.
+
+## Diagnose connectivity
+
+Confirm that the app is listening on the expected port and that the selected executor can reach it. Keep the tunnel or executor running, and inspect Activity if progress stops.
+
+Use the CLI help for your installed version before configuring more advanced runner workflows.

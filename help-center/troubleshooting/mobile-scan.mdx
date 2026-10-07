@@ -1,0 +1,28 @@
+---
+title: "Mobile scan troubleshooting"
+description: "Resolve build uploads, device queues, and missing screen coverage."
+---
+
+Start by checking the uploaded build, selected platform, and execution device.
+
+## The build will not upload
+
+Use an Android `.apk` or iOS `.ipa` prepared for testing, within the 250 MB upload limit. A Play Store or App Store URL is not a build file.
+
+Ask the app developer to confirm that the build can be installed on the selected test device.
+
+## The scan is waiting
+
+Real-device capacity can be busy. Check Activity before starting another copy. For Android iteration, use the emulator option where available.
+
+## The app opens but reaches few screens
+
+Check the saved mobile login and whether the app depends on a backend reachable from the execution environment. Confirm that required test data and permissions are available.
+
+A launch screen or login page does not demonstrate coverage of the rest of the app.
+
+## A new build behaves differently
+
+Upload the intended build instead of reusing an older one. Confirm platform, account, and target backend before comparing scans.
+
+Send support the project, scan ID, platform, build identifier, and safe error text if the problem persists.

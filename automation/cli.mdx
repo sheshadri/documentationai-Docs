@@ -1,0 +1,60 @@
+---
+title: "AegisRunner CLI"
+description: "Trigger scans and runs from a terminal and collect results for automation."
+---
+
+The `@aegisrunner/cli` package provides the `aegis` command. Use it with a project [CI token](/api-reference/authentication).
+
+## Install and authenticate
+
+Use a currently supported Node.js release. The package requires Node.js 18 or later.
+
+```bash
+npm install -g @aegisrunner/cli
+```
+
+Set `AEGIS_TOKEN` through your local secret manager or CI secret environment. The default API is `https://app.aegisrunner.com/api/v1`; set `AEGIS_API` to override it.
+
+## Run existing tests
+
+```bash
+# Run the default selection for the token's project.
+aegis run
+
+# Run a specific suite.
+aegis run --suite YOUR_SUITE_ID
+
+# Save a JUnit report.
+aegis run --suite YOUR_SUITE_ID --format junit --output aegis-results/junit.xml
+
+# Read the status of an existing run.
+aegis status YOUR_RUN_ID --format json
+```
+
+`aegis run` waits by default. Use `--no-wait` to return after dispatch or `--timeout 3600` to allow up to an hour.
+
+When no suite or case is selected, the API prefers suites from the latest scan and falls back to project suites when none are found. Select an explicit suite for a stable release check.
+
+## Scan and generate tests
+
+```bash
+aegis scan --watch
+aegis scan --url https://staging.example.com --watch
+aegis scan --role Admin --watch
+```
+
+A cloud scan URL override must satisfy the project's domain restriction. `--watch` follows discovery and test-generation progress. A scan command does not replace a separate regression run of existing tests.
+
+For a password login, pass the password through stdin or `AEGIS_PASSWORD`:
+
+```bash
+printf '%s' "$STAGING_PASSWORD" | aegis scan --username qa@example.com --password-stdin --watch
+```
+
+Credentials supplied this way are saved for the project so later scans and runs can sign in. Do not place passwords in command-line flags.
+
+## Interpret exit codes
+
+For `aegis run`, `0` indicates no blocking failure, `1` indicates test failures, and `2` indicates an error, timeout, or cancellation. A needs-review outcome is non-blocking when there are no failing cases; inspect it in the dashboard.
+
+Use `aegis --help` and the command's help for options supported by your installed release. For private targets, see [Local testing](/automation/local-testing).

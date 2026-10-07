@@ -1,24 +1,38 @@
 ---
-title: Test Not Running
-description: Fix SecuredAll test execution issues.
+title: "Scan or test not running"
+description: "Diagnose missing work, stalled progress, empty suites, and execution failures."
 ---
 
-## Symptoms
-- Test queued but never starts
-- CLI shows "Waiting for runner"
+First identify whether the problem is a **scan** that explores the app or a **run** that executes existing tests.
 
-## Common Causes
-- Agent not installed
-- Missing or invalid API token
+## Nothing started
 
-## Quick Fix
-<Steps>
-  <Step title="Check agent status">
-    ````bash
-    securedall agent status
-    ````
-  </Step>
-  <Step title="Update API token">
-    Make sure your API token is correct in the CLI config file.
-  </Step>
-</Steps>
+Check the error shown when you submitted the action. Confirm testing permission, target URL, selected app build, and required login fields. Review **Settings → Billing & plan → Plan & usage** for feature access and quotas.
+
+For API requests, read the body: a crawl can fail to start with HTTP `200` and `status: "crawl_failed"`.
+
+## Work is queued
+
+Open **Activity** and the project's Runs view. A queued job is not a completed test. Real-device scans can wait for a free device.
+
+Avoid submitting repeated copies while an earlier job is still active.
+
+## The scan found only a login page
+
+Open **App access**, verify the test account, and check the website login. For expired SSO or MFA sessions, refresh imported cookies. See [Login troubleshooting](/help-center/troubleshooting/login-failed).
+
+## No generated tests appear
+
+Confirm that you selected the intended scan and that test generation has finished. Check whether the scanner reached useful pages or only an error, login screen, or repeated page template.
+
+Correct access or discovery before rerunning a broad scan.
+
+## A local scan stopped
+
+Check that the app and tunnel or local executor are still running. Confirm the target port and connectivity from the executor machine.
+
+## A run failed
+
+Open the failed case and its first failing step. Check the target environment, data, account role, and available screenshot or error. A failed assertion can be an app defect or an expectation that needs updating.
+
+If the issue persists, [contact support](/help-center) with the run or scan ID.

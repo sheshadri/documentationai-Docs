@@ -1,21 +1,38 @@
 ---
-title: How do I start testing my app?
-description: Getting started with SecuredAll tests.
+title: "Getting started questions"
+description: "Answers about scans, test runs, access, mobile builds, and CI."
 ---
 
-## Overview
+Use these answers to choose a testing workflow and find the right setup guide.
 
-To start testing your web or mobile app with SecuredAll:
+## Do I need to write tests before the first scan?
 
-1. Sign up at `https://dashboard.securedall.com`
-2. Create a new project for your application
-3. Download the SecuredAll CLI tool
-4. Connect your repository or upload your test scripts
+No. AegisRunner can generate tests from the pages or screens it explores. Review those tests and their expected behavior before using them as a release check.
 
-## Running Your First Test
+## What is the difference between a scan and a run?
 
-```bash
-securedall run --project=my-app
-```
+A scan discovers app content and generates tests. A run executes existing tests. You can rerun a suite without repeating discovery.
 
-After the test, view actionable evidence and reports on your dashboard.
+## Why do I only see my sign-in page?
+
+The scanner may not have authenticated successfully. Configure [App access](/guides/authentication), verify the website login, and check that protected content is reached.
+
+## Can I test localhost?
+
+Yes, using a [tunnel or local scan executor](/automation/local-testing). A cloud browser's localhost is not your development machine.
+
+## Can I upload an app store link?
+
+No. Native mobile scanning needs an Android APK or iOS IPA prepared for testing. See [Mobile testing](/guides/mobile-testing).
+
+## Does a clean accessibility report prove WCAG conformance?
+
+No. It reports the automated checks and reached states. Combine it with manual accessibility testing.
+
+## Where is my API token?
+
+Create a CI token under the project's **Project setup → CI/CD**. These tokens are project-specific and require an eligible plan.
+
+## Where can I find exact prices and limits?
+
+Use **Settings → Billing & plan → Plan & usage** and the [pricing page](https://aegisrunner.com/pricing). Checkout shows the applicable price and payment details.

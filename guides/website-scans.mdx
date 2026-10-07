@@ -1,0 +1,35 @@
+---
+title: "Website scans"
+description: "Choose scan detail, verify discovery coverage, and repeat scans after app changes."
+---
+
+A website scan explores reachable pages and interactions and generates tests from what it finds. Run another scan when routes, forms, or workflows change; run existing suites when you want to check known behavior again.
+
+## Choose the right detail
+
+| Mode | Behavior |
+| --- | --- |
+| Smart scan | Checks representative pages in depth and samples repeated page types within the scan limit. |
+| Full detail | Checks more detail on each reached page within the scan limit. It can take longer. |
+
+Start with Smart scan to understand the app's coverage. Use Full detail when you need deeper exploration of the reached pages.
+
+## Allow the intended interactions
+
+The scan setup asks you to confirm testing permission and decide whether to allow changes. Creating, editing, or deleting records can affect your app's data. Use a staging environment and disposable test data for those workflows.
+
+Saving authorization for a project does not mean every future scan should be allowed to change data. Review that choice when starting each scan.
+
+## Reach protected pages
+
+Save an appropriate login under **App access** and use **Check website login** when available. For SSO or MFA, [session cookies](/guides/authentication) may be more suitable than a password form.
+
+Check the resulting screenshots and reached pages. A scan that stops at the sign-in page has not exercised the protected application.
+
+## Review discovery and generation
+
+Open **Activity** for progress, **Overview** for reached pages, and **Tests** for generated suites. Discovery and test generation are separate stages.
+
+A small result set can mean a narrow app, repeated page types, a plan limit, unreachable navigation, or an access problem. Inspect those causes before starting another full scan.
+
+For localhost or a private network, use [Local and private apps](/automation/local-testing).

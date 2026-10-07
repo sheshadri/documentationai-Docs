@@ -1,0 +1,35 @@
+---
+title: "Scheduled testing"
+description: "Repeat scans, suite runs, or baseline checks in a selected timezone."
+---
+
+Open **Project setup → Schedules** to automate recurring work. Availability depends on the project's plan.
+
+## Create a schedule
+
+1. Choose a template or create a schedule.
+2. Give it a descriptive name.
+3. Select the job and its target.
+4. Choose how often it should run.
+5. Check the timezone and save.
+
+The timezone defaults to the browser's timezone. Review it explicitly for team-owned schedules, especially around daylight saving changes.
+
+## Choose the work
+
+| Job | Purpose |
+| --- | --- |
+| Run all tests | Run the project's enabled suites. |
+| Run the latest scan's tests | Focus on suites from the most recent scan. |
+| Run one suite | Repeat a specific critical workflow. |
+| Run a group by tag | Run a group such as smoke tests. |
+| Visual baseline check | Compare with a saved reference. |
+| Re-scan the site | Discover pages and refresh generated tests. |
+| Re-scan, then test | Refresh discovery and execute tests. |
+| Re-scan the mobile app | Explore the previously scanned mobile app again. |
+
+## Keep schedules useful
+
+Choose a small, reviewed suite for frequent checks. Use a less frequent scan to discover larger app changes. Revisit schedules when you change the environment, login, baseline, or suite.
+
+Scheduled work still uses the project's limits. Check [Plan and usage](/account/plans-and-usage) if work stops starting.

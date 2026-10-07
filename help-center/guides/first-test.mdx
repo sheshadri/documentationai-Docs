@@ -1,30 +1,26 @@
 ---
-title: Run Your First SecuredAll Test
-description: Step-by-step to run your first test suite.
+title: "Run and inspect your first test"
+description: "Turn a completed scan into a small, repeatable regression check."
 ---
 
-## Overview
+Use a single reviewed suite to learn the execution workflow before adding broad automation.
 
-Follow these steps to run your initial test on SecuredAll.
+## Prepare a scan
 
-<Steps>
-  <Step title="Install CLI">
-    ````bash
-    npm install -g securedall-cli
-    ````
-  </Step>
-  <Step title="Authenticate CLI">
-    ````bash
-    securedall login
-    # Paste your API token when prompted
-    ````
-  </Step>
-  <Step title="Run a test suite">
-    ````bash
-    securedall run --project=my-app
-    ````
-  </Step>
-  <Step title="View results">
-    Go to your dashboard at https://dashboard.securedall.com for detailed test evidence.
-  </Step>
-</Steps>
+Follow the [website quickstart](/quickstart). Wait for discovery and test generation, then confirm the expected pages appear in Overview.
+
+If the app requires a login, verify that protected content was reached.
+
+## Pick one meaningful suite
+
+Open **Tests** and choose a suite for a simple, important workflow. Read the actions, input data, and expectations. Make sure the test account can complete the workflow.
+
+## Execute and inspect
+
+Start the suite and open **Runs**. When it completes, inspect each failed or needs-review case. Open the step evidence to understand what happened.
+
+Fix any access or data problem before changing the application's behavior or the test expectation.
+
+## Make it repeatable
+
+Run the same suite again against the same environment. Once its behavior is understood, add it to a [schedule](/automation/schedules) or [CI pipeline](/automation/ci-cd).

@@ -1,12 +1,45 @@
 {
-  "name": "SecuredAll",
+  "name": "AegisRunner",
+  "initialRoute": "introduction",
+  "url": "https://docs.aegisrunner.com",
+  "logo-light": "https://aegisrunner.com/logo.png",
+  "logo-dark": "https://aegisrunner.com/logo.png",
+  "logo-small-light": "https://aegisrunner.com/favicon.svg",
+  "logo-small-dark": "https://aegisrunner.com/favicon.svg",
   "colors": {
     "light": {
       "brand": "#0e7490"
     },
     "dark": {
-      "brand": "#61CDEB"
+      "brand": "#22d3ee"
     }
+  },
+  "navbar": {
+    "actions": {
+      "primary": {
+        "title": "Open dashboard",
+        "link": "https://app.aegisrunner.com/app"
+      },
+      "links": [
+        {
+          "title": "Website",
+          "link": "https://aegisrunner.com"
+        },
+        {
+          "title": "Support",
+          "link": "mailto:support@aegisrunner.com"
+        }
+      ]
+    }
+  },
+  "seo": {
+    "siteUrl": "https://docs.aegisrunner.com",
+    "siteName": "AegisRunner documentation",
+    "defaultDescription": "Guides for AegisRunner website and mobile testing, app access, test results, CI automation, and billing.",
+    "robots:index": true,
+    "robots:follow": true,
+    "sitemap:enabled": true,
+    "llms-txt:enabled": true
   },
   "navigation": {
     "tabs": [
@@ -15,40 +48,103 @@
         "icon": "book",
         "groups": [
           {
-            "group": "Getting Started",
-            "icon": "rocket",
+            "group": "Getting started",
             "pages": [
               {
-                "title": "Introduction",
-                "path": "introduction",
-                "icon": "home"
+                "title": "AegisRunner documentation",
+                "path": "introduction"
               },
               {
-                "title": "Quickstart",
-                "path": "quickstart",
-                "icon": "zap"
+                "title": "Run your first website scan",
+                "path": "quickstart"
+              },
+              {
+                "title": "What AegisRunner tests",
+                "path": "features"
+              },
+              {
+                "title": "Projects and navigation",
+                "path": "guides/projects"
               }
             ]
           },
           {
-            "group": "Core Concepts",
-            "icon": "layers",
+            "group": "Testing your app",
             "pages": [
               {
-                "title": "Features",
-                "path": "features",
-                "icon": "star"
+                "title": "Website scans",
+                "path": "guides/website-scans"
+              },
+              {
+                "title": "App access and login",
+                "path": "guides/authentication"
+              },
+              {
+                "title": "Environments and test data",
+                "path": "guides/environments-and-data"
+              },
+              {
+                "title": "Test suites and runs",
+                "path": "guides/test-suites"
+              },
+              {
+                "title": "Mobile testing",
+                "path": "guides/mobile-testing"
               }
             ]
           },
           {
-            "group": "Advanced",
-            "icon": "folder",
+            "group": "Results and evidence",
             "pages": [
               {
-                "title": "Integrations",
-                "path": "integrations",
-                "icon": "plug"
+                "title": "Read and share results",
+                "path": "guides/results"
+              },
+              {
+                "title": "Accessibility and WCAG reports",
+                "path": "guides/accessibility"
+              },
+              {
+                "title": "Baselines and visual changes",
+                "path": "guides/baselines"
+              }
+            ]
+          },
+          {
+            "group": "Automation",
+            "pages": [
+              {
+                "title": "AegisRunner CLI",
+                "path": "automation/cli"
+              },
+              {
+                "title": "CI and deployment pipelines",
+                "path": "automation/ci-cd"
+              },
+              {
+                "title": "Local and private apps",
+                "path": "automation/local-testing"
+              },
+              {
+                "title": "Scheduled testing",
+                "path": "automation/schedules"
+              },
+              {
+                "title": "Integrations and notifications",
+                "path": "integrations"
+              }
+            ]
+          },
+          {
+            "group": "Account",
+            "pages": [
+              {
+                "title": "Plans and usage",
+                "path": "account/plans-and-usage"
+              },
+              {
+                "title": "Billing and invoices",
+                "path": "account/billing"
               }
             ]
           }
@@ -59,7 +155,24 @@
         "icon": "code",
         "groups": [
           {
-            "group": "Endpoints",
+            "group": "Using the API",
+            "pages": [
+              {
+                "title": "Automation API overview",
+                "path": "api-reference/overview"
+              },
+              {
+                "title": "API authentication",
+                "path": "api-reference/authentication"
+              },
+              {
+                "title": "API errors and completion states",
+                "path": "api-reference/errors"
+              }
+            ]
+          },
+          {
+            "group": "CI endpoints",
             "openapi": "api-reference/openapi.yaml",
             "pages": []
           }
@@ -68,55 +181,44 @@
       {
         "tab": "Help Center",
         "icon": "help-circle",
-        "pages": [
+        "groups": [
           {
-            "title": "Help Center",
-            "path": "help-center",
-            "icon": "home"
-          },
-          {
-            "group": "FAQs",
-            "icon": "help-circle",
-            "expandable": false,
+            "group": "Help",
             "pages": [
               {
-                "title": "Getting Started",
+                "title": "AegisRunner help center",
+                "path": "help-center"
+              },
+              {
+                "title": "Getting started questions",
                 "path": "help-center/faq/getting-started"
+              },
+              {
+                "title": "Run and inspect your first test",
+                "path": "help-center/guides/first-test"
+              },
+              {
+                "title": "Product updates",
+                "path": "changelog"
               }
             ]
           },
           {
             "group": "Troubleshooting",
-            "icon": "alert-triangle",
-            "expandable": false,
             "pages": [
               {
-                "title": "Test Not Running",
+                "title": "Scan or test not running",
                 "path": "help-center/troubleshooting/test-not-running"
-              }
-            ]
-          },
-          {
-            "group": "Guides",
-            "icon": "book-open",
-            "expandable": false,
-            "pages": [
+              },
               {
-                "title": "First Test",
-                "path": "help-center/guides/first-test"
+                "title": "Login troubleshooting",
+                "path": "help-center/troubleshooting/login-failed"
+              },
+              {
+                "title": "Mobile scan troubleshooting",
+                "path": "help-center/troubleshooting/mobile-scan"
               }
             ]
-          }
-        ]
-      },
-      {
-        "tab": "Changelog",
-        "icon": "clock",
-        "pages": [
-          {
-            "title": "Release History",
-            "path": "changelog",
-            "icon": "history"
           }
         ]
       }

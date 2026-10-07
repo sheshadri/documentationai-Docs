@@ -1,0 +1,38 @@
+---
+title: "Test suites and runs"
+description: "Review generated test cases and execute them against your app."
+---
+
+A suite groups test cases. Each case contains actions and checks. A run executes selected tests and records the outcome.
+
+## Review a generated suite
+
+1. Complete a scan and wait for test generation.
+2. Open **Tests** in the project.
+3. Inspect a suite's cases and steps.
+4. Confirm that the tested role, target page, inputs, and expected behavior are appropriate.
+
+Generated tests reflect what the scanner observed. Review expectations before using a suite as a release check, especially for content that changes frequently.
+
+## Start a run
+
+Select the suites or cases you want to execute and start the run. Open **Runs** to monitor it and inspect the final results.
+
+For a focused first run, choose a small suite representing an important workflow. Once it behaves as expected, include it in [CI](/automation/ci-cd) or a [schedule](/automation/schedules).
+
+## Interpret case outcomes
+
+| Outcome | Meaning |
+| --- | --- |
+| Passed | The executed checks passed. |
+| Failed | A check or execution failed; inspect its evidence. |
+| Skipped | The case was not executed or was skipped. |
+| Needs review | A softer content expectation needs review even though the harder checks passed. |
+
+Do not count skipped cases as demonstrated coverage. A needs-review result should be triaged even when it does not block CI.
+
+## Investigate and repeat
+
+Open the affected run and case to inspect steps, screenshots, recordings, or error details when available. **Re-run failed only** includes failed and needs-review cases.
+
+Correct the app, access, data, or expectation as appropriate, then rerun the relevant tests. Re-scan when the underlying workflow has changed enough that the generated suites need refreshing.
