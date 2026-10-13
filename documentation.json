@@ -233,6 +233,10 @@
             "group": "Account and organization",
             "pages": [
               {
+                "title": "Security and data protection",
+                "path": "account/security-and-data-protection"
+              },
+              {
                 "title": "Account profile and security",
                 "path": "account/profile-and-security"
               },

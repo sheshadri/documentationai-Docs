@@ -51,3 +51,9 @@ These app access tokens authenticate against your target application. They are d
 ## If the login fails
 
 Confirm the account works manually on the exact target environment. Check for an expired session, a required extra field, a changed form, or an interactive challenge. Follow [Login troubleshooting](/help-center/troubleshooting/login-failed).
+
+## Credential protection
+
+Saved App access tokens, session-cookie values, custom headers, and login scripts are encrypted before database storage using AES-256-GCM. The testing service decrypts the credentials needed to run your authorized workflow. Use a dedicated test account and update saved access when its credentials expire or are rotated.
+
+See [Security and data protection](/account/security-and-data-protection) for workspace permissions, evidence access, and AI data handling.
