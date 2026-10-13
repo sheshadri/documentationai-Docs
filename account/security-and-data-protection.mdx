@@ -1,0 +1,52 @@
+---
+title: "Security and data protection"
+description: "Understand saved credentials, private artifact access, workspace permissions, AI processing, and safe test setup."
+---
+
+Before connecting an application, review the test account, the data it can reach, and the evidence your workflow may capture. This guide explains the platform controls and the setup decisions your team makes. For a short overview, see [Security and data protection](https://aegisrunner.com/security).
+
+## Protect your AegisRunner account
+
+Enable [two-factor authentication](/account/two-factor-authentication) in account security settings and keep recovery codes in your own secure storage. Connections to the AegisRunner website and app use HTTPS.
+
+Review [team and project permissions](/account/team-and-permissions) when people join, change responsibilities, or leave. Project access is checked against membership and workspace role; write operations have additional permission checks. Your AegisRunner account and the test account used to sign in to your application are separate identities.
+
+## Store credentials in App access
+
+Use [App access](/guides/authentication) for target-application logins, session cookies, API tokens, request headers, and supported login scripts. Use [Variables and secrets](/guides/environments-and-data) for the configuration appropriate to your tests.
+
+Saved App access tokens, session-cookie values, custom headers, and login scripts are encrypted before database storage using AES-256-GCM. The testing service decrypts credentials when it needs them to execute your authorized workflow. Encryption at rest does not mean the test runner can sign in without access to the credentials.
+
+Use a dedicated test account with only the permissions the workflow needs. Rotate its credentials through the target application and update App access when a password, token, or session expires. Do not paste passwords or API keys into chat, support tickets, or publicly shared examples.
+
+## Understand private evidence and shared reports
+
+Private artifacts are accessed through an authenticated endpoint that checks project access before issuing a download link. These signed links expire after 15 minutes. Treat a generated link as sensitive: anyone holding it may be able to access that artifact until it expires. A downloaded copy does not expire when its link does.
+
+A [public run report](/account/data-and-sharing) is a different sharing mechanism. Anyone with its public link can view the report. Review screenshots, recordings, errors, and displayed or submitted values before sharing. A private artifact's download-link lifetime is not the lifetime of a public report.
+
+## Know what AI features process
+
+AI features send relevant test context to model providers to analyze pages and generate or review tests. Image-based analysis can include screenshots. A screenshot can contain whatever was visible in the tested application, so use representative test data rather than real customer records where possible.
+
+Provider processing depends on the feature and configuration. Contact [Support](/help-center) to review provider and retention requirements before supplying sensitive data. Do not assume that using a private target means AI processing remains inside your network.
+
+## Review mobile and localhost data paths
+
+Uploaded mobile builds are stored in private object storage. Cloud real-device testing transfers the build to the device-testing provider to run your tests. See [Mobile testing](/guides/mobile-testing) and the [Privacy policy](https://aegisrunner.com/privacy) for setup and mobile-build processing details.
+
+[Localhost and private-network testing](/automation/local-testing) describes how AegisRunner reaches the target. It does not mean every result, screenshot, or AI operation stays on your machine. Review the workflow's data path with the team if you need a specific deployment boundary.
+
+## Retention, deletion, and ownership
+
+Retention depends on the data type and your account settings. Consult [Test data and shared reports](/account/data-and-sharing) and the [Privacy policy](https://aegisrunner.com/privacy) for retention and deletion requests. Exporting supported web suites as Playwright TypeScript lets you maintain the test code independently; it does not delete stored evidence.
+
+## Before your first sensitive workflow
+
+1. Choose a dedicated test account and review its permissions.
+2. Use representative records and check what may appear in screenshots or logs.
+3. Review App access and whether the workflow is allowed to change application data.
+4. Enable two-factor authentication and check workspace membership.
+5. Review evidence before sharing or exporting it.
+
+For a security questionnaire, data-handling review, or security concern, contact [support@aegisrunner.com](mailto:support@aegisrunner.com). Include the workflow and your requirements, without sending passwords, API keys, or unnecessary customer data.
