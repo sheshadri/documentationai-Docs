@@ -685,8 +685,8 @@ paths:
       - Imports and exports
       summary: Export suite code
       operationId: export_code
-      description: Export supported web or native mobile test source. Use Playwright for a web suite and
-        Appium for a native mobile suite.
+      description: Export supported web test source. Use Playwright for a web suite.
+        Mobile Appium export is temporarily unavailable.
       security:
       - accountSession: []
       responses:

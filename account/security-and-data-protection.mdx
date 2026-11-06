@@ -15,7 +15,7 @@ Review [team and project permissions](/account/team-and-permissions) when people
 
 Use [App access](/guides/authentication) for target-application logins, session cookies, API tokens, request headers, and supported login scripts. Use [Variables and secrets](/guides/environments-and-data) for the configuration appropriate to your tests.
 
-Saved App access tokens, session-cookie values, custom headers, and login scripts are encrypted before database storage using AES-256-GCM. The testing service decrypts credentials when it needs them to execute your authorized workflow. Encryption at rest does not mean the test runner can sign in without access to the credentials.
+The testing service uses saved App access tokens, session-cookie values, custom headers, and login scripts only when it needs them to execute your authorized workflow.
 
 Use a dedicated test account with only the permissions the workflow needs. Rotate its credentials through the target application and update App access when a password, token, or session expires. Do not paste passwords or API keys into chat, support tickets, or publicly shared examples.
 
